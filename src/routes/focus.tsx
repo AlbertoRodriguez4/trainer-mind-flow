@@ -1,13 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
 import {
   ChevronLeft,
   Pause,
-  Play,
   Mic,
-  Dumbbell,
-  Zap,
-  Check,
+  Minus,
+  Plus,
+  Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/focus")({
@@ -21,25 +20,23 @@ export const Route = createFileRoute("/focus")({
 });
 
 function FocusMode() {
-  const [heartRate, setHeartRate] = useState(145);
+  const [heartRate, setHeartRate] = useState(148);
   const [restTime, setRestTime] = useState(105);
   const [isResting, setIsResting] = useState(true);
   const [weight, setWeight] = useState(24);
   const [reps, setReps] = useState(8);
   const [rpe, setRpe] = useState(8.5);
 
-  // Simulate heart rate fluctuation
   useEffect(() => {
     const interval = setInterval(() => {
       setHeartRate((prev) => {
-        const change = (Math.random() - 0.5) * 4;
+        const change = (Math.random() - 0.5) * 3;
         return Math.min(180, Math.max(100, Math.round(prev + change)));
       });
-    }, 1500);
+    }, 1200);
     return () => clearInterval(interval);
   }, []);
 
-  // Rest timer countdown
   useEffect(() => {
     if (!isResting) return;
     const interval = setInterval(() => {
@@ -55,15 +52,52 @@ function FocusMode() {
   }, [isResting]);
 
   return (
-    <div className="min-h-screen w-full bg-[oklch(0.08_0.02_260)]">
-      <div className="relative mx-auto flex min-h-screen w-full max-w-[440px] flex-col bg-background pb-8">
+    <div className="min-h-screen bg-black">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col pb-28">
+        {/* Ambient glow */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-gradient-to-b from-cyan-500/10 via-violet-500/5 to-transparent blur-3xl" />
+        </div>
+
         {/* Header */}
-        <Header />
+        <header className="relative z-20 px-6 pb-4 pt-14">
+          <div className="flex items-center justify-between">
+            <Link
+              to="/"
+              className="grid h-11 w-11 place-items-center rounded-full bg-neutral-900/80 text-white/90 backdrop-blur-md transition active:scale-95"
+            >
+              <ChevronLeft className="h-6 w-6" strokeWidth={2.5} />
+            </Link>
+
+            <div className="text-center">
+              <p className="text-[11px] font-medium tracking-tight text-neutral-500">
+                Personal Tr<span className="text-ai-gradient font-bold">AI</span>ner
+              </p>
+            </div>
+
+            <button className="grid h-11 w-11 place-items-center rounded-full bg-neutral-900/80 text-white/90 backdrop-blur-md transition active:scale-95">
+              <Pause className="h-6 w-6" strokeWidth={2.5} />
+            </button>
+          </div>
+
+          {/* Exercise Title */}
+          <div className="mt-6 text-center">
+            <h1 className="text-[28px] font-bold tracking-tight text-white">
+              Press Militar
+            </h1>
+            <p className="mt-1 text-[15px] font-medium text-neutral-500">
+              Serie 3 de 4
+            </p>
+          </div>
+        </header>
 
         {/* Main Content */}
-        <main className="flex-1 space-y-4 px-5 pt-2">
-          <BiometricCard heartRate={heartRate} />
-          <InputBlocks
+        <main className="relative z-10 flex-1 space-y-4 px-6">
+          {/* Heart Rate Card - The AI Brain */}
+          <HeartRateCard heartRate={heartRate} />
+
+          {/* Exercise Inputs */}
+          <ExerciseInputs
             weight={weight}
             setWeight={setWeight}
             reps={reps}
@@ -71,87 +105,61 @@ function FocusMode() {
             rpe={rpe}
             setRpe={setRpe}
           />
-          <RestCard
+
+          {/* AI Rest Card */}
+          <AIRestCard
             restTime={restTime}
             isResting={isResting}
             setIsResting={setIsResting}
-            setRestTime={setRestTime}
           />
         </main>
 
         {/* Floating CTA */}
-        <FloatingCTA />
+        <div className="fixed bottom-0 inset-x-0 z-30 px-6 pb-8 pt-4">
+          <div className="mx-auto max-w-[430px]">
+            <button className="inline-flex h-16 w-full items-center justify-center rounded-full bg-white py-4 text-lg font-semibold text-black shadow-[0_0_40px_rgba(255,255,255,0.15)] transition active:scale-[0.98]">
+              Completar Serie
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function BrandName({ className = "" }: { className?: string }) {
-  return (
-    <span className={`font-display font-bold tracking-tight ${className}`}>
-      Personal Tr
-      <span className="text-ai-gradient font-extrabold italic">AI</span>
-      ner
-    </span>
-  );
-}
-
-function Header() {
-  return (
-    <header className="sticky top-0 z-20 px-5 pb-3 pt-5">
-      <div className="flex items-center justify-between">
-        <button className="grid h-10 w-10 place-items-center rounded-full bg-white/[0.08] text-white/80 backdrop-blur-sm transition active:scale-95">
-          <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
-        </button>
-
-        <div className="text-center">
-          <h1 className="text-[20px] font-bold leading-tight text-white">
-            Press Militar
-          </h1>
-          <p className="text-[13px] text-white/50">Serie 3 de 4</p>
-        </div>
-
-        <button className="grid h-10 w-10 place-items-center rounded-full bg-white/[0.08] text-white/80 backdrop-blur-sm transition active:scale-95">
-          <Pause className="h-5 w-5" strokeWidth={2.5} />
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function BiometricCard({ heartRate }: { heartRate: number }) {
+function HeartRateCard({ heartRate }: { heartRate: number }) {
   const getZone = () => {
-    if (heartRate < 120) return { label: "Recuperación", color: "text-blue-400", bg: "bg-blue-400/20" };
-    if (heartRate < 140) return { label: "Aeróbico", color: "text-emerald-400", bg: "bg-emerald-400/20" };
-    if (heartRate < 160) return { label: "Alta Intensidad", color: "text-orange-400", bg: "bg-orange-400/20" };
-    return { label: "Máximo", color: "text-red-400", bg: "bg-red-400/20" };
+    if (heartRate < 120) return { label: "Recuperación", color: "text-sky-400", bg: "bg-sky-400/20" };
+    if (heartRate < 140) return { label: "Cardio", color: "text-emerald-400", bg: "bg-emerald-400/20" };
+    if (heartRate < 160) return { label: "Alta Intensidad", color: "text-amber-400", bg: "bg-amber-400/20" };
+    return { label: "Pico", color: "text-rose-400", bg: "bg-rose-400/20" };
   };
 
   const zone = getZone();
 
   return (
-    <section className="relative overflow-hidden rounded-[28px] bg-white/[0.06] p-5 backdrop-blur-xl">
-      {/* Glassmorphism overlay */}
-      <div className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-inset ring-white/[0.08]" />
+    <section className="relative overflow-hidden rounded-3xl bg-neutral-900/60 p-6 backdrop-blur-xl">
+      {/* Glassmorphism border */}
+      <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/[0.06]" />
 
       {/* Heart Rate Chart */}
       <div className="relative">
         <HeartRateChart heartRate={heartRate} />
 
-        {/* BPM Overlay */}
+        {/* BPM Display */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="flex items-baseline gap-1">
-            <span className="text-[56px] font-bold leading-none tabular-nums text-white">
+          <div className="flex items-baseline gap-2">
+            <span className="text-[52px] font-black leading-none tabular-nums tracking-tight text-white">
               {heartRate}
             </span>
-            <span className="text-[18px] font-medium text-white/50">BPM</span>
+            <span className="text-[18px] font-medium text-neutral-500">BPM</span>
           </div>
 
           {/* Zone Badge */}
-          <div className={`mt-2 inline-flex items-center gap-1.5 rounded-full ${zone.bg} px-3 py-1`}>
-            <Zap className={`h-3.5 w-3.5 ${zone.color}`} strokeWidth={2.5} />
-            <span className={`text-[12px] font-semibold ${zone.color}`}>
-              Zona {zone.label}
+          <div className={`mt-3 inline-flex items-center gap-2 rounded-full ${zone.bg} px-4 py-1.5`}>
+            <span className={`h-2 w-2 rounded-full ${zone.color.replace('text-', 'bg-')} animate-pulse`} />
+            <span className={`text-[13px] font-semibold ${zone.color}`}>
+              {zone.label}
             </span>
           </div>
         </div>
@@ -163,16 +171,17 @@ function BiometricCard({ heartRate }: { heartRate: number }) {
 function HeartRateChart({ heartRate }: { heartRate: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [points, setPoints] = useState<number[]>(() =>
-    Array.from({ length: 80 }, () => 0.5 + Math.random() * 0.3)
+    Array.from({ length: 100 }, () => 0.45 + Math.random() * 0.25)
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
       setPoints((prev) => {
-        const newPoint = heartRate / 200 + (Math.random() - 0.5) * 0.15;
-        return [...prev.slice(1), Math.max(0.1, Math.min(0.95, newPoint))];
+        const baseLevel = heartRate / 200;
+        const newPoint = baseLevel + (Math.random() - 0.5) * 0.12;
+        return [...prev.slice(1), Math.max(0.15, Math.min(0.9, newPoint))];
       });
-    }, 100);
+    }, 80);
     return () => clearInterval(interval);
   }, [heartRate]);
 
@@ -190,24 +199,25 @@ function HeartRateChart({ heartRate }: { heartRate: number }) {
 
     ctx.clearRect(0, 0, rect.width, rect.height);
 
-    // Draw gradient fill
-    const gradient = ctx.createLinearGradient(0, 0, 0, rect.height);
-    gradient.addColorStop(0, "rgba(168, 85, 247, 0.3)");
-    gradient.addColorStop(0.5, "rgba(59, 130, 246, 0.15)");
-    gradient.addColorStop(1, "rgba(59, 130, 246, 0)");
+    // Draw glow layer first
+    const glowGradient = ctx.createLinearGradient(0, 0, 0, rect.height);
+    glowGradient.addColorStop(0, "rgba(34, 211, 238, 0.25)");
+    glowGradient.addColorStop(0.5, "rgba(34, 211, 238, 0.08)");
+    glowGradient.addColorStop(1, "rgba(34, 211, 238, 0)");
 
     ctx.beginPath();
     ctx.moveTo(0, rect.height);
 
+    const midY = rect.height * 0.4;
     points.forEach((point, i) => {
       const x = (i / (points.length - 1)) * rect.width;
-      const y = rect.height - point * rect.height * 0.8 - rect.height * 0.1;
+      const y = rect.height - point * rect.height * 0.6 - midY;
 
       if (i === 0) {
         ctx.lineTo(x, y);
       } else {
         const prevX = ((i - 1) / (points.length - 1)) * rect.width;
-        const prevY = rect.height - points[i - 1] * rect.height * 0.8 - rect.height * 0.1;
+        const prevY = rect.height - points[i - 1] * rect.height * 0.6 - midY;
         const cpX = (prevX + x) / 2;
         ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
       }
@@ -215,46 +225,53 @@ function HeartRateChart({ heartRate }: { heartRate: number }) {
 
     ctx.lineTo(rect.width, rect.height);
     ctx.closePath();
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = glowGradient;
     ctx.fill();
 
-    // Draw line on top
+    // Draw the main curve
     ctx.beginPath();
     points.forEach((point, i) => {
       const x = (i / (points.length - 1)) * rect.width;
-      const y = rect.height - point * rect.height * 0.8 - rect.height * 0.1;
+      const y = rect.height - point * rect.height * 0.6 - midY;
 
       if (i === 0) {
         ctx.moveTo(x, y);
       } else {
         const prevX = ((i - 1) / (points.length - 1)) * rect.width;
-        const prevY = rect.height - points[i - 1] * rect.height * 0.8 - rect.height * 0.1;
+        const prevY = rect.height - points[i - 1] * rect.height * 0.6 - midY;
         const cpX = (prevX + x) / 2;
         ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
       }
     });
 
+    // Cyan gradient stroke
     const lineGradient = ctx.createLinearGradient(0, 0, rect.width, 0);
-    lineGradient.addColorStop(0, "oklch(0.72 0.18 295)");
-    lineGradient.addColorStop(0.5, "oklch(0.7 0.19 260)");
-    lineGradient.addColorStop(1, "oklch(0.78 0.17 200)");
+    lineGradient.addColorStop(0, "#22d3ee");
+    lineGradient.addColorStop(0.5, "#06b6d4");
+    lineGradient.addColorStop(1, "#14b8a6");
 
     ctx.strokeStyle = lineGradient;
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 3;
     ctx.lineCap = "round";
+    ctx.lineJoin = "round";
     ctx.stroke();
+
+    // Add glow effect
+    ctx.shadowColor = "#22d3ee";
+    ctx.shadowBlur = 20;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
   }, [points]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="h-[180px] w-full opacity-90"
-      style={{ filter: "blur(0.5px)" }}
+      className="h-[200px] w-full"
     />
   );
 }
 
-function InputBlocks({
+function ExerciseInputs({
   weight,
   setWeight,
   reps,
@@ -271,89 +288,86 @@ function InputBlocks({
 }) {
   return (
     <section className="grid grid-cols-3 gap-3">
-      <InputBlock
+      <InputTile
         label="Peso"
         value={weight}
         step={0.5}
         onChange={setWeight}
         unit="kg"
-        icon={<Dumbbell className="h-4 w-4" strokeWidth={2} />}
       />
-      <InputBlock
+      <InputTile
         label="Reps"
         value={reps}
         step={1}
         onChange={setReps}
         unit=""
-        icon={<Check className="h-4 w-4" strokeWidth={2.5} />}
       />
-      <InputBlock
+      <InputTile
         label="RPE"
         value={rpe}
         step={0.5}
         onChange={setRpe}
         unit=""
-        icon={<Zap className="h-4 w-4" strokeWidth={2.5} />}
       />
     </section>
   );
 }
 
-function InputBlock({
+function InputTile({
   label,
   value,
   step,
   onChange,
   unit,
-  icon,
 }: {
   label: string;
   value: number;
   step: number;
   onChange: (v: number) => void;
   unit: string;
-  icon: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-[24px] bg-white/[0.06] p-4 backdrop-blur-xl ring-1 ring-inset ring-white/[0.08]">
-      <div className="text-white/40">{icon}</div>
-      <div className="flex items-baseline gap-0.5">
-        <span className="text-[28px] font-bold tabular-nums text-white">
-          {value}
-        </span>
-        {unit && <span className="text-[13px] text-white/40">{unit}</span>}
-      </div>
-      <p className="text-[11px] font-medium uppercase tracking-wider text-white/30">
+    <div className="flex flex-col items-center gap-3 rounded-3xl bg-neutral-900/60 p-4 backdrop-blur-xl ring-1 ring-inset ring-white/[0.06]">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-neutral-500">
         {label}
       </p>
-      <div className="flex gap-2">
+
+      <div className="flex items-center gap-3">
         <button
           onClick={() => onChange(Math.max(0, value - step))}
-          className="grid h-9 w-9 place-items-center rounded-xl bg-white/[0.08] text-white/70 transition active:scale-95 active:bg-white/[0.15]"
+          className="grid h-12 w-12 place-items-center rounded-full bg-neutral-800 text-white transition active:scale-90 active:bg-neutral-700"
         >
-          <span className="text-[18px] font-semibold">−</span>
+          <Minus className="h-5 w-5" strokeWidth={2.5} />
         </button>
+
+        <div className="flex min-w-[56px] flex-col items-center">
+          <span className="text-[28px] font-bold tabular-nums tracking-tight text-white">
+            {value}
+          </span>
+          {unit && (
+            <span className="text-[12px] font-medium text-neutral-500">{unit}</span>
+          )}
+        </div>
+
         <button
           onClick={() => onChange(value + step)}
-          className="grid h-9 w-9 place-items-center rounded-xl bg-white/[0.08] text-white/70 transition active:scale-95 active:bg-white/[0.15]"
+          className="grid h-12 w-12 place-items-center rounded-full bg-neutral-800 text-white transition active:scale-90 active:bg-neutral-700"
         >
-          <span className="text-[18px] font-semibold">+</span>
+          <Plus className="h-5 w-5" strokeWidth={2.5} />
         </button>
       </div>
     </div>
   );
 }
 
-function RestCard({
+function AIRestCard({
   restTime,
   isResting,
   setIsResting,
-  setRestTime,
 }: {
   restTime: number;
   isResting: boolean;
   setIsResting: (v: boolean) => void;
-  setRestTime: (v: number) => void;
 }) {
   const minutes = Math.floor(restTime / 60);
   const seconds = restTime % 60;
@@ -361,113 +375,88 @@ function RestCard({
   const progress = restTime / maxTime;
 
   return (
-    <section className="rounded-[28px] bg-white/[0.06] p-5 backdrop-blur-xl ring-1 ring-inset ring-white/[0.08]">
-      <div className="flex items-center justify-between gap-4">
+    <section className="relative overflow-hidden rounded-3xl bg-neutral-900/60 p-5 backdrop-blur-xl ring-1 ring-inset ring-indigo-500/20">
+      {/* Ambient shimmer */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
+        <div className="absolute -left-20 -top-20 h-40 w-40 rounded-full bg-indigo-500/10 blur-2xl" />
+      </div>
+
+      <div className="relative flex items-center justify-between gap-4">
         {/* Timer */}
         <div className="flex items-center gap-4">
-          <div className="relative h-[72px] w-[72px] shrink-0">
-            <svg className="h-full w-full -rotate-90" viewBox="0 0 72 72">
+          <div className="relative h-[68px] w-[68px] shrink-0">
+            <svg className="h-full w-full -rotate-90" viewBox="0 0 68 68">
               <circle
-                cx="36"
-                cy="36"
-                r="32"
+                cx="34"
+                cy="34"
+                r="30"
                 stroke="white"
                 strokeOpacity="0.08"
-                strokeWidth="6"
+                strokeWidth="4"
                 fill="none"
               />
               <circle
-                cx="36"
-                cy="36"
-                r="32"
+                cx="34"
+                cy="34"
+                r="30"
                 stroke="url(#restGradient)"
-                strokeWidth="6"
+                strokeWidth="4"
                 strokeLinecap="round"
                 fill="none"
-                strokeDasharray={2 * Math.PI * 32}
-                strokeDashoffset={2 * Math.PI * 32 * (1 - progress)}
-                className="transition-all duration-1000"
+                strokeDasharray={2 * Math.PI * 30}
+                strokeDashoffset={2 * Math.PI * 30 * (1 - progress)}
+                className="transition-all duration-500"
               />
               <defs>
-                <linearGradient id="restGradient" x1="0" y1="0" x2="72" y2="72">
-                  <stop offset="0%" stopColor="oklch(0.72 0.18 295)" />
-                  <stop offset="100%" stopColor="oklch(0.78 0.17 200)" />
+                <linearGradient id="restGradient" x1="0" y1="0" x2="68" y2="68">
+                  <stop offset="0%" stopColor="#818cf8" />
+                  <stop offset="100%" stopColor="#c084fc" />
                 </linearGradient>
               </defs>
             </svg>
             <div className="absolute inset-0 grid place-items-center">
-              <Play className="h-6 w-6 text-white/80" strokeWidth={2.5} />
+              <Sparkles className="h-6 w-6 text-indigo-400" strokeWidth={2} />
             </div>
           </div>
 
           <div className="min-w-0">
-            <p className="text-[12px] font-medium text-white/40">
-              Descanso IA
-            </p>
-            <p className="text-[22px] font-bold tabular-nums text-white">
+            <p className="text-[20px] font-bold tabular-nums text-white">
               {minutes}:{seconds.toString().padStart(2, "0")}
             </p>
+            <p className="text-[13px] text-neutral-400">Descanso óptimo</p>
           </div>
         </div>
 
-        {/* AI Message */}
-        <div className="flex-1 text-right">
-          <p className="text-[13px] leading-snug text-white/60">
-            Recuperación cardíaca <span className="text-ai-gradient font-semibold">óptima</span>
-          </p>
-        </div>
-      </div>
+        {/* AI Voice FAB */}
+        <button className="group relative grid h-14 w-14 place-items-center rounded-full transition active:scale-95">
+          {/* Animated gradient background */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-violet-600 via-indigo-500 to-cyan-500 opacity-100 transition group-active:opacity-80" />
+          {/* Glow ring */}
+          <div className="pointer-events-none absolute -inset-1 rounded-full bg-gradient-to-tr from-violet-600/50 to-cyan-500/50 opacity-60 blur-lg transition group-active:opacity-80" />
 
-      {/* Audio Waveform Button */}
-      <div className="mt-4 flex items-center justify-between">
-        <button
-          onClick={() => setIsResting(!isResting)}
-          className="inline-flex items-center gap-2 rounded-full bg-white/[0.08] px-4 py-2.5 text-[13px] font-medium text-white/70 transition active:scale-95"
-        >
-          {isResting ? (
-            <>
-              <Pause className="h-4 w-4" strokeWidth={2.5} />
-              Pausar
-            </>
-          ) : (
-            <>
-              <Play className="h-4 w-4" strokeWidth={2.5} />
-              Iniciar
-            </>
-          )}
-        </button>
+          <Mic className="relative z-10 h-6 w-6 text-white" strokeWidth={2.5} />
 
-        <button className="group relative flex h-12 items-center justify-end gap-2 overflow-hidden rounded-full bg-ai-gradient px-4 pl-12 shadow-lg transition active:scale-95">
-          {/* Animated waveform */}
-          <div className="absolute left-4 flex h-6 items-center gap-[3px]">
-            {[0.3, 0.7, 0.5, 0.9, 0.4, 0.6, 0.8, 0.45].map((h, i) => (
-              <span
-                key={i}
-                className="w-[3px] origin-bottom rounded-full bg-white/90 animate-wave"
-                style={{
-                  height: `${h * 100}%`,
-                  animationDelay: `${i * 0.12}s`,
-                }}
-              />
-            ))}
+          {/* Audio wave animation */}
+          <div className="absolute inset-0 overflow-hidden rounded-full">
+            <div className="absolute left-4 top-1/2 flex -translate-y-1/2 items-center gap-[2px]">
+              {[0.35, 0.7, 0.5, 0.85, 0.4, 0.65, 0.55, 0.75].map((h, i) => (
+                <span
+                  key={i}
+                  className="w-[2px] rounded-full bg-white/90 animate-wave"
+                  style={{
+                    height: `${h * 14}px`,
+                    animationDelay: `${i * 0.1}s`,
+                  }}
+                />
+              ))}
+            </div>
           </div>
-          <Mic className="h-5 w-5 text-white" strokeWidth={2.5} />
-          <span className="text-[13px] font-semibold text-white">Hablar</span>
         </button>
       </div>
+
+      <p className="relative mt-3 text-[13px] text-neutral-500">
+        Basado en tu recuperación cardíaca actual
+      </p>
     </section>
-  );
-}
-
-function FloatingCTA() {
-  return (
-    <div className="pointer-events-none fixed bottom-0 inset-x-0 z-30 px-5 pb-8 pt-4">
-      <div className="pointer-events-auto mx-auto flex max-w-[440px] justify-center">
-        <button className="inline-flex h-14 w-full max-w-[320px] items-center justify-center gap-2 rounded-full bg-ai-gradient px-8 text-[16px] font-semibold text-white shadow-[0_8px_32px_rgba(168,85,247,0.4)] transition active:scale-[0.98]">
-          <Check className="h-5 w-5" strokeWidth={2.5} />
-          Completar Serie
-        </button>
-      </div>
-    </div>
   );
 }
