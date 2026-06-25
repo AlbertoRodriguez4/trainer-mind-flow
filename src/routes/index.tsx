@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Sparkles, Play, Hop as Home, Dumbbell, Apple, Activity, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Heart, Camera, ScanLine, FileText, Upload, TriangleAlert as AlertTriangle, Image as ImageIcon, TrendingDown, TrendingUp, CircleUser } from "lucide-react";
@@ -365,10 +365,13 @@ function WorkoutCard() {
         </span>
       </div>
 
-      <button className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-ai-gradient px-5 py-4 text-[15px] font-semibold text-white shadow-card transition active:scale-[0.99]">
+      <Link
+        to="/focus"
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-ai-gradient px-5 py-4 text-[15px] font-semibold text-white shadow-card transition active:scale-[0.99]"
+      >
         <Play className="h-4 w-4 fill-current" strokeWidth={0} />
         Iniciar Focus Mode
-      </button>
+      </Link>
     </section>
   );
 }
@@ -491,10 +494,13 @@ function FocusModeCard() {
         <span><span className="text-[18px] font-bold text-foreground">8–10</span> reps</span>
         <span><span className="text-[18px] font-bold text-foreground">22kg</span></span>
       </div>
-      <button className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-ai-gradient px-5 py-4 text-[15px] font-semibold text-white shadow-card transition active:scale-[0.99]">
+      <Link
+        to="/focus"
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-ai-gradient px-5 py-4 text-[15px] font-semibold text-white shadow-card transition active:scale-[0.99]"
+      >
         <Camera className="h-4 w-4" strokeWidth={2.25} />
         Activar Cámara Edge AI
-      </button>
+      </Link>
     </section>
   );
 }
