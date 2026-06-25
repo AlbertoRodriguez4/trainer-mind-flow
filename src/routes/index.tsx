@@ -1,29 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  Sparkles,
-  Mic,
-  Play,
-  Home,
-  Dumbbell,
-  Apple,
-  Activity,
-  ChevronRight,
-} from "lucide-react";
+import { Sparkles, Play, Hop as Home, Dumbbell, Apple, Activity, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import {
-  Heart,
-  Camera,
-  ScanLine,
-  FileText,
-  Upload,
-  AlertTriangle,
-  Pause,
-  Volume2,
-  Image as ImageIcon,
-  TrendingDown,
-  TrendingUp,
-  CircleUser,
-} from "lucide-react";
+import { Heart, Camera, ScanLine, FileText, Upload, TriangleAlert as AlertTriangle, Image as ImageIcon, TrendingDown, TrendingUp, CircleUser } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -401,7 +379,7 @@ function CoachScreen() {
   return (
     <>
       <RAGBubble />
-      <VoiceHero />
+      <WorkoutSummary />
       <FocusModeCard />
     </>
   );
@@ -426,42 +404,68 @@ function RAGBubble() {
   );
 }
 
-function VoiceHero() {
+function WorkoutSummary() {
+  const metrics = [
+    { label: "Frecuencia cardíaca", value: "142", unit: "bpm", sub: "media" },
+    { label: "Duración", value: "52", unit: "min", sub: "activo" },
+    { label: "Calorías", value: "384", unit: "kcal", sub: "quemadas" },
+    { label: "Volumen", value: "4.2", unit: "t", sub: "carga total" },
+  ];
+
+  const conclusions = [
+    { icon: TrendingUp, text: "Tu rendimiento mejoró un 12% respecto a la semana pasada", positive: true },
+    { icon: Heart, text: "Recuperación cardíaca excelente: 45 bpm en 2 minutos", positive: true },
+    { icon: Activity, text: "Zona cardiovascular óptima durante el 78% del entrenamiento", positive: true },
+    { icon: AlertTriangle, text: "Fatiga detectada en el último series de press militar", positive: false },
+  ];
+
   return (
-    <section className="rounded-[32px] bg-card p-6 shadow-card">
-      <div className="relative mx-auto grid h-56 w-56 place-items-center">
-        <div className="absolute inset-0 rounded-full bg-ai-gradient opacity-20 blur-2xl animate-ai-pulse" />
-        <div className="absolute inset-6 rounded-full bg-ai-gradient opacity-30 blur-xl" />
-        <div className="relative grid h-44 w-44 place-items-center rounded-full bg-ai-gradient shadow-card">
-          <div className="grid h-36 w-36 place-items-center rounded-full bg-background">
-            <div className="flex h-10 items-end gap-1.5">
-              {[0.4, 0.8, 0.55, 1, 0.7, 0.9, 0.45, 0.75].map((h, i) => (
-                <span
-                  key={i}
-                  className="w-1.5 origin-bottom rounded-full bg-ai-gradient animate-wave"
-                  style={{ height: `${h * 100}%`, animationDelay: `${i * 0.08}s` }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+    <section className="rounded-[28px] bg-card p-5 shadow-card">
+      <div className="flex items-center justify-between">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Resumen de hoy
+        </p>
+        <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
+          Completado
+        </span>
       </div>
-      <p className="mt-5 text-center text-[15px] font-semibold text-foreground">
-        Escuchando…
-      </p>
-      <p className="mt-1 text-center text-[12px] text-muted-foreground">
-        Conversación full-duplex en tiempo real
-      </p>
-      <div className="mt-5 flex items-center justify-center gap-3">
-        <button className="grid h-11 w-11 place-items-center rounded-full bg-surface-2 text-foreground/70 transition active:scale-95">
-          <Volume2 className="h-4 w-4" strokeWidth={2.25} />
-        </button>
-        <button className="grid h-14 w-14 place-items-center rounded-full bg-foreground text-background shadow-card transition active:scale-95">
-          <Pause className="h-5 w-5" strokeWidth={2.25} />
-        </button>
-        <button className="grid h-11 w-11 place-items-center rounded-full bg-surface-2 text-foreground/70 transition active:scale-95">
-          <Mic className="h-4 w-4" strokeWidth={2.25} />
-        </button>
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        {metrics.map(({ label, value, unit, sub }) => (
+          <div key={label} className="rounded-2xl bg-surface-1 p-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              {label}
+            </p>
+            <div className="mt-1 flex items-baseline gap-1">
+              <span className="text-[22px] font-bold tracking-tight text-foreground">{value}</span>
+              <span className="text-[11px] text-muted-foreground">{unit}</span>
+            </div>
+            <p className="text-[10px] text-muted-foreground">{sub}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Conclusiones IA
+        </p>
+        <div className="mt-3 space-y-2">
+          {conclusions.map(({ icon: Icon, text, positive }, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-2.5 rounded-xl bg-surface-1 px-3 py-2.5"
+            >
+              <div
+                className={`grid h-5 w-5 shrink-0 place-items-center rounded-full ${
+                  positive ? "bg-emerald-100 text-emerald-600" : "bg-orange-100 text-orange-600"
+                }`}
+              >
+                <Icon className="h-3 w-3" strokeWidth={2.25} />
+              </div>
+              <p className="text-[13px] leading-snug text-foreground">{text}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
