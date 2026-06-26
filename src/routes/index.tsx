@@ -804,8 +804,8 @@ function MacrosOverview() {
           <KcalDial consumed={MACROS_DATA[0].consumed} goal={MACROS_DATA[0].goal} />
         </div>
         <div className="mt-5 space-y-3">
-          {MACROS_DATA.slice(1).map((m) => (
-            <MacroRow key={m.key} {...m} />
+          {MACROS_DATA.slice(1).map(({ key, ...m }) => (
+            <MacroRow key={key} {...m} />
           ))}
         </div>
       </div>
