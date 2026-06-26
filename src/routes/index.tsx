@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Sparkles, Play, Hop as Home, Dumbbell, Apple, Activity, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Heart, Camera, ScanLine, FileText, Upload, TriangleAlert as AlertTriangle, Image as ImageIcon, TrendingDown, TrendingUp, CircleUser } from "lucide-react";
+import { Heart, Camera, ScanLine, FileText, Upload, TriangleAlert as AlertTriangle, Image as ImageIcon, TrendingDown, TrendingUp, CircleUser, Mic } from "lucide-react";
+import logoAsset from "@/assets/traainer-logo.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,7 +63,14 @@ function Header() {
           <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
             Jueves · 25 jun
           </p>
-          <BrandName className="block truncate text-[22px] leading-tight" />
+          <Link to="/auth" className="flex items-center gap-2">
+            <img
+              src={logoAsset.url}
+              alt="Personal TrAIner"
+              className="h-7 w-7 rounded-lg object-cover ring-1 ring-border"
+            />
+            <BrandName className="block truncate text-[22px] leading-tight" />
+          </Link>
         </div>
         <LiveSync />
       </div>
@@ -400,7 +408,7 @@ function RAGBubble() {
         </span>
       </div>
       <p className="mt-2 text-[15px] font-medium leading-snug text-foreground">
-        Hola Carlos, noto por tu voz de ayer que estás estresado.
+        Hola Carlos, según tus métricas de ayer detecto algo de estrés.
         He ajustado tu rutina de <span className="text-ai-gradient font-semibold">fuerza</span>.
       </p>
     </div>
