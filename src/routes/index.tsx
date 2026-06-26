@@ -101,6 +101,8 @@ function DashboardScreen() {
       <PredictiveAlert />
       <QuickActions />
       <DailySummary />
+      <MacrosMini />
+      <XiaomiLastWorkout />
       <WorkoutCard />
     </>
   );
@@ -391,6 +393,7 @@ function CoachScreen() {
     <>
       <RAGBubble />
       <WorkoutSummary />
+      <XiaomiWorkouts />
       <FocusModeCard />
     </>
   );
@@ -518,6 +521,7 @@ function FocusModeCard() {
 function NutritionScreen() {
   return (
     <>
+      <MacrosOverview />
       <CameraViewer />
       <ScanResultCard />
     </>
