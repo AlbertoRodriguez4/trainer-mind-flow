@@ -101,6 +101,8 @@ function DashboardScreen() {
       <PredictiveAlert />
       <QuickActions />
       <DailySummary />
+      <MacrosMini />
+      <XiaomiLastWorkout />
       <WorkoutCard />
     </>
   );
@@ -391,6 +393,7 @@ function CoachScreen() {
     <>
       <RAGBubble />
       <WorkoutSummary />
+      <XiaomiWorkouts />
       <FocusModeCard />
     </>
   );
@@ -518,6 +521,7 @@ function FocusModeCard() {
 function NutritionScreen() {
   return (
     <>
+      <MacrosOverview />
       <CameraViewer />
       <ScanResultCard />
     </>
@@ -732,6 +736,229 @@ function MeshFigure({ label, tilt, muted = false }: { label: string; tilt: numbe
 }
 
 /* ============================== NAV ============================== */
+
+/* ============================== MACROS ============================== */
+
+const MACROS_DATA = [
+  { key: "kcal", label: "Calorías", consumed: 1820, goal: 2400, unit: "kcal", color: "oklch(0.7 0.19 260)" },
+  { key: "protein", label: "Proteína", consumed: 92, goal: 160, unit: "g", color: "oklch(0.72 0.18 295)" },
+  { key: "carbs", label: "Carbohidratos", consumed: 178, goal: 260, unit: "g", color: "oklch(0.78 0.17 200)" },
+  { key: "fat", label: "Grasas", consumed: 48, goal: 75, unit: "g", color: "oklch(0.75 0.13 30)" },
+];
+
+function MacrosMini() {
+  const kcal = MACROS_DATA[0];
+  const pct = kcal.consumed / kcal.goal;
+  return (
+    <section
+      aria-label="Macros de hoy"
+      className="rounded-[28px] bg-card p-5 shadow-card"
+    >
+      <div className="flex items-center justify-between">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Macros · hoy
+        </p>
+        <span className="text-[11px] font-semibold text-foreground/70">
+          {kcal.consumed} <span className="text-muted-foreground">/ {kcal.goal} kcal</span>
+        </span>
+      </div>
+      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-full bg-ai-gradient" style={{ width: `${Math.min(pct, 1) * 100}%` }} />
+      </div>
+      <div className="mt-4 grid grid-cols-3 gap-2">
+        {MACROS_DATA.slice(1).map((m) => {
+          const p = Math.min(m.consumed / m.goal, 1);
+          return (
+            <div key={m.key} className="rounded-2xl bg-surface-1 p-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {m.label}
+              </p>
+              <p className="mt-1 text-[14px] font-bold tracking-tight">
+                {m.consumed}
+                <span className="text-[11px] font-medium text-muted-foreground">/{m.goal}{m.unit}</span>
+              </p>
+              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                <div className="h-full rounded-full" style={{ width: `${p * 100}%`, background: m.color }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function MacrosOverview() {
+  return (
+    <section aria-label="Macronutrientes diarios" className="space-y-3">
+      <div className="rounded-[28px] bg-card p-5 shadow-card">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              Hoy · Jueves 25 jun
+            </p>
+            <h2 className="mt-1 text-[22px] font-bold tracking-tight">
+              Tus macros
+            </h2>
+          </div>
+          <KcalDial consumed={MACROS_DATA[0].consumed} goal={MACROS_DATA[0].goal} />
+        </div>
+        <div className="mt-5 space-y-3">
+          {MACROS_DATA.slice(1).map(({ key, ...m }) => (
+            <MacroRow key={key} {...m} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function KcalDial({ consumed, goal }: { consumed: number; goal: number }) {
+  const r = 30;
+  const c = 2 * Math.PI * r;
+  const pct = Math.min(consumed / goal, 1);
+  const remaining = Math.max(goal - consumed, 0);
+  return (
+    <div className="relative h-[88px] w-[88px]">
+      <svg viewBox="0 0 72 72" className="h-full w-full -rotate-90">
+        <circle cx="36" cy="36" r={r} className="fill-none stroke-muted" strokeWidth="7" />
+        <circle
+          cx="36" cy="36" r={r}
+          stroke="url(#aiRing)" strokeWidth="7" strokeLinecap="round" fill="none"
+          strokeDasharray={c} strokeDashoffset={c * (1 - pct)}
+        />
+      </svg>
+      <div className="absolute inset-0 grid place-items-center text-center leading-none">
+        <div>
+          <p className="text-[15px] font-bold tracking-tight">{remaining}</p>
+          <p className="text-[9px] font-medium uppercase tracking-wider text-muted-foreground">restan</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MacroRow({
+  label, consumed, goal, unit, color,
+}: { label: string; consumed: number; goal: number; unit: string; color: string }) {
+  const pct = Math.min(consumed / goal, 1);
+  const remaining = Math.max(goal - consumed, 0);
+  return (
+    <div>
+      <div className="flex items-baseline justify-between">
+        <p className="text-[13px] font-semibold text-foreground">{label}</p>
+        <p className="text-[12px] tabular-nums text-muted-foreground">
+          <span className="font-semibold text-foreground">{consumed}</span>
+          {" / "}{goal}{unit}
+          <span className="ml-2 text-[11px] text-muted-foreground">· faltan {remaining}{unit}</span>
+        </p>
+      </div>
+      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-full rounded-full" style={{ width: `${pct * 100}%`, background: color }} />
+      </div>
+    </div>
+  );
+}
+
+/* ============================== XIAOMI ============================== */
+
+type XiaomiSession = {
+  id: string;
+  type: string;
+  when: string;
+  duration: string;
+  hrAvg: number;
+  hrMax: number;
+  kcal: number;
+  distance?: string;
+};
+
+const XIAOMI_SESSIONS: XiaomiSession[] = [
+  { id: "1", type: "Carrera al aire libre", when: "Hoy · 07:12", duration: "38 min", hrAvg: 152, hrMax: 174, kcal: 412, distance: "6.4 km" },
+  { id: "2", type: "Fuerza · Tren superior", when: "Ayer · 19:40", duration: "52 min", hrAvg: 128, hrMax: 162, kcal: 384 },
+  { id: "3", type: "Bicicleta", when: "Mar · 18:05", duration: "1 h 12", hrAvg: 138, hrMax: 168, kcal: 612, distance: "24.8 km" },
+  { id: "4", type: "Yoga", when: "Lun · 08:30", duration: "30 min", hrAvg: 92, hrMax: 110, kcal: 128 },
+];
+
+function XiaomiBadge() {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-foreground/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-background">
+      <span className="h-1.5 w-1.5 rounded-full bg-orange-400" />
+      Xiaomi
+    </span>
+  );
+}
+
+function XiaomiLastWorkout() {
+  const s = XIAOMI_SESSIONS[0];
+  return (
+    <section aria-label="Último entrenamiento Xiaomi" className="rounded-[28px] bg-card p-5 shadow-card">
+      <div className="flex items-center justify-between">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Última actividad
+        </p>
+        <XiaomiBadge />
+      </div>
+      <h3 className="mt-2 text-[18px] font-bold leading-tight tracking-tight">{s.type}</h3>
+      <p className="text-[12px] text-muted-foreground">{s.when}</p>
+      <div className="mt-4 grid grid-cols-4 gap-2">
+        <MiniStat value={s.duration} label="duración" />
+        <MiniStat value={`${s.hrAvg}`} label="bpm med" />
+        <MiniStat value={`${s.kcal}`} label="kcal" />
+        <MiniStat value={s.distance ?? `${s.hrMax}`} label={s.distance ? "dist." : "bpm máx"} />
+      </div>
+    </section>
+  );
+}
+
+function MiniStat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="rounded-xl bg-surface-1 px-2 py-2 text-center">
+      <p className="text-[13px] font-bold tracking-tight text-foreground">{value}</p>
+      <p className="text-[9px] uppercase tracking-wider text-muted-foreground">{label}</p>
+    </div>
+  );
+}
+
+function XiaomiWorkouts() {
+  return (
+    <section aria-label="Historial Xiaomi" className="rounded-[28px] bg-card p-5 shadow-card">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Registros · Mi Band
+          </p>
+          <h3 className="mt-1 text-[18px] font-bold tracking-tight">Entrenamientos Xiaomi</h3>
+        </div>
+        <XiaomiBadge />
+      </div>
+      <ul className="mt-4 divide-y divide-border/60">
+        {XIAOMI_SESSIONS.map((s) => (
+          <li key={s.id} className="flex items-center gap-3 py-3">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-ai-soft">
+              <Heart className="h-4 w-4 text-foreground/70" strokeWidth={2.25} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
+                {s.type}
+              </p>
+              <p className="text-[11px] text-muted-foreground">
+                {s.when} · {s.duration}
+                {s.distance ? ` · ${s.distance}` : ""}
+              </p>
+            </div>
+            <div className="text-right leading-tight">
+              <p className="text-[13px] font-bold tabular-nums text-foreground">{s.hrAvg}<span className="text-[10px] font-medium text-muted-foreground">bpm</span></p>
+              <p className="text-[10px] text-muted-foreground">{s.kcal} kcal</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/* ============================== NAV (cont.) ============================== */
 
 function BottomNav({ active, onChange }: { active: TabKey; onChange: (k: TabKey) => void }) {
   const items: { key: TabKey; icon: typeof Home; label: string }[] = [
