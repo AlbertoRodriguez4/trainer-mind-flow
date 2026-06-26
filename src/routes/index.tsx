@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Sparkles, Play, Hop as Home, Dumbbell, Apple, Activity, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Heart, Camera, ScanLine, FileText, Upload, TriangleAlert as AlertTriangle, Image as ImageIcon, TrendingDown, TrendingUp, CircleUser } from "lucide-react";
+import { Heart, Camera, ScanLine, FileText, Upload, TriangleAlert as AlertTriangle, Image as ImageIcon, TrendingDown, TrendingUp, CircleUser, Mic } from "lucide-react";
 import logoAsset from "@/assets/traainer-logo.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
