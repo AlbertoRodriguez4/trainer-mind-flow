@@ -10,13 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as FocusRouteImport } from './routes/focus'
+import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkoutIdRouteImport } from './routes/workout.$id'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const FocusRoute = FocusRouteImport.update({
   id: '/focus',
   path: '/focus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -34,38 +41,58 @@ const WorkoutIdRoute = WorkoutIdRouteImport.update({
   path: '/workout/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
+  '/api/chat': typeof ApiChatRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
+  '/api/chat': typeof ApiChatRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
+  '/api/chat': typeof ApiChatRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/focus' | '/workout/$id'
+  fullPaths: '/' | '/auth' | '/chat' | '/focus' | '/api/chat' | '/workout/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/focus' | '/workout/$id'
-  id: '__root__' | '/' | '/auth' | '/focus' | '/workout/$id'
+  to: '/' | '/auth' | '/chat' | '/focus' | '/api/chat' | '/workout/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/chat'
+    | '/focus'
+    | '/api/chat'
+    | '/workout/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  ChatRoute: typeof ChatRoute
   FocusRoute: typeof FocusRoute
+  ApiChatRoute: typeof ApiChatRoute
   WorkoutIdRoute: typeof WorkoutIdRoute
 }
 
@@ -76,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/focus'
       fullPath: '/focus'
       preLoaderRoute: typeof FocusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -99,13 +133,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkoutIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  ChatRoute: ChatRoute,
   FocusRoute: FocusRoute,
+  ApiChatRoute: ApiChatRoute,
   WorkoutIdRoute: WorkoutIdRoute,
 }
 export const routeTree = rootRouteImport

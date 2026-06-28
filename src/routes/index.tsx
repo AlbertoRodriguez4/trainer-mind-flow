@@ -99,12 +99,42 @@ function DashboardScreen() {
   return (
     <>
       <PredictiveAlert />
+      <AICoachCTA />
       <QuickActions />
       <DailySummary />
       <MacrosMini />
       <XiaomiLastWorkout />
       <WorkoutCard />
     </>
+  );
+}
+
+function AICoachCTA() {
+  return (
+    <Link
+      to="/chat"
+      className="group relative block overflow-hidden rounded-[28px] p-[1px] shadow-card"
+      aria-label="Hablar con la IA"
+    >
+      <span className="bg-ai-gradient absolute inset-0" aria-hidden />
+      <div className="relative flex items-center gap-3 rounded-[27px] bg-background/85 p-4 backdrop-blur-xl">
+        <div className="bg-ai-gradient flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white shadow-soft">
+          <Sparkles className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            AI Coach
+          </p>
+          <p className="truncate text-[15px] font-semibold leading-tight">
+            Habla con tu entrenador IA
+          </p>
+          <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+            Pregunta sobre rutinas, macros o recuperación
+          </p>
+        </div>
+        <ChevronRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+      </div>
+    </Link>
   );
 }
 
