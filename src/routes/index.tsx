@@ -99,6 +99,7 @@ function DashboardScreen() {
   return (
     <>
       <PredictiveAlert />
+      <AICoachCTA />
       <QuickActions />
       <DailySummary />
       <MacrosMini />
