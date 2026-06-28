@@ -934,23 +934,32 @@ function XiaomiWorkouts() {
       </div>
       <ul className="mt-4 divide-y divide-border/60">
         {XIAOMI_SESSIONS.map((s) => (
-          <li key={s.id} className="flex items-center gap-3 py-3">
-            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-ai-soft">
-              <Heart className="h-4 w-4 text-foreground/70" strokeWidth={2.25} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
-                {s.type}
-              </p>
-              <p className="text-[11px] text-muted-foreground">
-                {s.when} · {s.duration}
-                {s.distance ? ` · ${s.distance}` : ""}
-              </p>
-            </div>
-            <div className="text-right leading-tight">
-              <p className="text-[13px] font-bold tabular-nums text-foreground">{s.hrAvg}<span className="text-[10px] font-medium text-muted-foreground">bpm</span></p>
-              <p className="text-[10px] text-muted-foreground">{s.kcal} kcal</p>
-            </div>
+          <li key={s.id}>
+            <Link
+              to="/workout/$id"
+              params={{ id: s.id }}
+              className="flex items-center gap-3 py-3 transition active:scale-[0.99]"
+            >
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-ai-soft">
+                <Heart className="h-4 w-4 text-foreground/70" strokeWidth={2.25} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
+                  {s.type}
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  {s.when} · {s.duration}
+                  {s.distance ? ` · ${s.distance}` : ""}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="text-right leading-tight">
+                  <p className="text-[13px] font-bold tabular-nums text-foreground">{s.hrAvg}<span className="text-[10px] font-medium text-muted-foreground">bpm</span></p>
+                  <p className="text-[10px] text-muted-foreground">{s.kcal} kcal</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" strokeWidth={2.25} />
+              </div>
+            </Link>
           </li>
         ))}
       </ul>
