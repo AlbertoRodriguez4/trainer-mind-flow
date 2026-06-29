@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowUp, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowUp, Sparkles, Paperclip, X } from "lucide-react";
 import logoAsset from "@/assets/traainer-logo.jpg.asset.json";
 
 export const Route = createFileRoute("/chat")({
@@ -21,10 +21,13 @@ const SUGGESTIONS = [
 
 function ChatScreen() {
   const [input, setInput] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,11 +39,35 @@ function ChatScreen() {
 
   const isLoading = status === "submitted" || status === "streaming";
 
+  const addFiles = (list: FileList | null) => {
+    if (!list) return;
+    const imgs = Array.from(list).filter((f) => f.type.startsWith("image/"));
+    if (!imgs.length) return;
+    setFiles((prev) => [...prev, ...imgs]);
+    imgs.forEach((f) => {
+      const url = URL.createObjectURL(f);
+      setPreviews((prev) => [...prev, url]);
+    });
+  };
+
+  const removeFile = (i: number) => {
+    setPreviews((prev) => {
+      URL.revokeObjectURL(prev[i]);
+      return prev.filter((_, idx) => idx !== i);
+    });
+    setFiles((prev) => prev.filter((_, idx) => idx !== i));
+  };
+
   const submit = (text: string) => {
     const t = text.trim();
-    if (!t || isLoading) return;
-    void sendMessage({ text: t });
+    if ((!t && files.length === 0) || isLoading) return;
+    const dt = new DataTransfer();
+    files.forEach((f) => dt.items.add(f));
+    void sendMessage({ text: t || "¿Qué ves en esta imagen?", files: dt.files });
     setInput("");
+    previews.forEach((p) => URL.revokeObjectURL(p));
+    setFiles([]);
+    setPreviews([]);
     requestAnimationFrame(() => taRef.current?.focus());
   };
 
@@ -93,9 +120,46 @@ function ChatScreen() {
               e.preventDefault();
               submit(input);
             }}
-            className="glass flex items-end gap-2 rounded-[24px] p-2 pl-4 shadow-card ring-1 ring-border"
+            className="glass rounded-[24px] p-2 pl-2 shadow-card ring-1 ring-border"
           >
-            <textarea
+            {previews.length > 0 && (
+              <div className="flex flex-wrap gap-2 px-2 pb-2 pt-1">
+                {previews.map((src, i) => (
+                  <div key={src} className="relative h-16 w-16 overflow-hidden rounded-xl ring-1 ring-border">
+                    <img src={src} alt="" className="h-full w-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeFile(i)}
+                      className="absolute right-0.5 top-0.5 grid h-5 w-5 place-items-center rounded-full bg-black/60 text-white"
+                      aria-label="Quitar imagen"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex items-end gap-1.5">
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  addFiles(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-muted-foreground transition hover:bg-surface-2 hover:text-foreground"
+                aria-label="Adjuntar imagen"
+              >
+                <Paperclip className="h-[18px] w-[18px]" />
+              </button>
+              <textarea
               ref={taRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -108,15 +172,16 @@ function ChatScreen() {
               placeholder="Pregunta a tu AI Coach…"
               rows={1}
               className="max-h-32 flex-1 resize-none bg-transparent py-2 text-[15px] leading-snug outline-none placeholder:text-muted-foreground"
-            />
+              />
             <button
               type="submit"
-              disabled={!input.trim() || isLoading}
+              disabled={(!input.trim() && files.length === 0) || isLoading}
               className="bg-ai-gradient flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-soft transition-opacity disabled:opacity-40"
               aria-label="Enviar"
             >
               <ArrowUp className="h-4 w-4" />
             </button>
+            </div>
           </form>
         </div>
       </div>
@@ -128,17 +193,39 @@ function MessageBubble({ message }: { message: UIMessage }) {
   const text = message.parts
     .map((p) => (p.type === "text" ? p.text : ""))
     .join("");
+  const images = message.parts.flatMap((p) => {
+    if (p.type === "file" && typeof p.mediaType === "string" && p.mediaType.startsWith("image/")) {
+      return [p.url];
+    }
+    return [];
+  });
   const isUser = message.role === "user";
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-      <div
-        className={
-          isUser
-            ? "max-w-[82%] rounded-[22px] rounded-br-md bg-primary px-4 py-2.5 text-[15px] leading-relaxed text-primary-foreground shadow-soft"
-            : "max-w-[88%] whitespace-pre-wrap text-[15px] leading-relaxed text-foreground"
-        }
-      >
-        {text}
+      <div className={isUser ? "flex max-w-[82%] flex-col items-end gap-1.5" : "max-w-[88%]"}>
+        {images.length > 0 && (
+          <div className="flex flex-wrap justify-end gap-1.5">
+            {images.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt=""
+                className="max-h-56 max-w-[180px] rounded-2xl object-cover ring-1 ring-border"
+              />
+            ))}
+          </div>
+        )}
+        {text && (
+          <div
+            className={
+              isUser
+                ? "rounded-[22px] rounded-br-md bg-primary px-4 py-2.5 text-[15px] leading-relaxed text-primary-foreground shadow-soft"
+                : "whitespace-pre-wrap text-[15px] leading-relaxed text-foreground"
+            }
+          >
+            {text}
+          </div>
+        )}
       </div>
     </div>
   );
