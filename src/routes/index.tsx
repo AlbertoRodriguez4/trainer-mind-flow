@@ -100,12 +100,40 @@ function DashboardScreen() {
     <>
       <PredictiveAlert />
       <AICoachCTA />
+      <NewSectionsRow />
       <QuickActions />
       <DailySummary />
       <MacrosMini />
       <XiaomiLastWorkout />
       <WorkoutCard />
     </>
+  );
+}
+
+function NewSectionsRow() {
+  const items = [
+    { to: "/recovery" as const, icon: Heart, title: "Recuperación", sub: "Sueño & VFC IA" },
+    { to: "/devices" as const, icon: Activity, title: "Dispositivos", sub: "Sync Center" },
+  ];
+  return (
+    <section aria-label="Accesos avanzados" className="grid grid-cols-2 gap-3">
+      {items.map(({ to, icon: Icon, title, sub }) => (
+        <Link
+          key={to}
+          to={to}
+          className="group flex items-center gap-3 rounded-2xl bg-card p-3.5 shadow-soft transition active:scale-[0.98]"
+        >
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-ai-gradient text-white">
+            <Icon className="h-4 w-4" strokeWidth={2.25} />
+          </div>
+          <div className="min-w-0 leading-tight">
+            <p className="truncate text-[13px] font-semibold text-foreground">{title}</p>
+            <p className="truncate text-[11px] text-muted-foreground">{sub}</p>
+          </div>
+          <ChevronRight className="ml-auto h-4 w-4 text-muted-foreground transition group-hover:translate-x-0.5" />
+        </Link>
+      ))}
+    </section>
   );
 }
 

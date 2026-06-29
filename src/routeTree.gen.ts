@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RecoveryRouteImport } from './routes/recovery'
 import { Route as FocusRouteImport } from './routes/focus'
+import { Route as DevicesRouteImport } from './routes/devices'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,9 +19,19 @@ import { Route as WorkoutIdRouteImport } from './routes/workout.$id'
 import { Route as ClinicImportRouteImport } from './routes/clinic.import'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const RecoveryRoute = RecoveryRouteImport.update({
+  id: '/recovery',
+  path: '/recovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FocusRoute = FocusRouteImport.update({
   id: '/focus',
   path: '/focus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevicesRoute = DevicesRouteImport.update({
+  id: '/devices',
+  path: '/devices',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChatRoute = ChatRouteImport.update({
@@ -57,7 +69,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
+  '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
@@ -66,7 +80,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
+  '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
@@ -76,7 +92,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
+  '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
@@ -87,7 +105,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/chat'
+    | '/devices'
     | '/focus'
+    | '/recovery'
     | '/api/chat'
     | '/clinic/import'
     | '/workout/$id'
@@ -96,7 +116,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/chat'
+    | '/devices'
     | '/focus'
+    | '/recovery'
     | '/api/chat'
     | '/clinic/import'
     | '/workout/$id'
@@ -105,7 +127,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/chat'
+    | '/devices'
     | '/focus'
+    | '/recovery'
     | '/api/chat'
     | '/clinic/import'
     | '/workout/$id'
@@ -115,7 +139,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   ChatRoute: typeof ChatRoute
+  DevicesRoute: typeof DevicesRoute
   FocusRoute: typeof FocusRoute
+  RecoveryRoute: typeof RecoveryRoute
   ApiChatRoute: typeof ApiChatRoute
   ClinicImportRoute: typeof ClinicImportRoute
   WorkoutIdRoute: typeof WorkoutIdRoute
@@ -123,11 +149,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/recovery': {
+      id: '/recovery'
+      path: '/recovery'
+      fullPath: '/recovery'
+      preLoaderRoute: typeof RecoveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/focus': {
       id: '/focus'
       path: '/focus'
       fullPath: '/focus'
       preLoaderRoute: typeof FocusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devices': {
+      id: '/devices'
+      path: '/devices'
+      fullPath: '/devices'
+      preLoaderRoute: typeof DevicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chat': {
@@ -179,7 +219,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   ChatRoute: ChatRoute,
+  DevicesRoute: DevicesRoute,
   FocusRoute: FocusRoute,
+  RecoveryRoute: RecoveryRoute,
   ApiChatRoute: ApiChatRoute,
   ClinicImportRoute: ClinicImportRoute,
   WorkoutIdRoute: WorkoutIdRoute,
@@ -187,13 +229,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
