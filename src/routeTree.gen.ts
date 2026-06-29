@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RecoveryRouteImport } from './routes/recovery'
 import { Route as FocusRouteImport } from './routes/focus'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -17,6 +18,11 @@ import { Route as WorkoutIdRouteImport } from './routes/workout.$id'
 import { Route as ClinicImportRouteImport } from './routes/clinic.import'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const RecoveryRoute = RecoveryRouteImport.update({
+  id: '/recovery',
+  path: '/recovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FocusRoute = FocusRouteImport.update({
   id: '/focus',
   path: '/focus',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
+  '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
+  '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
+  '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/chat'
     | '/focus'
+    | '/recovery'
     | '/api/chat'
     | '/clinic/import'
     | '/workout/$id'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/chat'
     | '/focus'
+    | '/recovery'
     | '/api/chat'
     | '/clinic/import'
     | '/workout/$id'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/chat'
     | '/focus'
+    | '/recovery'
     | '/api/chat'
     | '/clinic/import'
     | '/workout/$id'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChatRoute: typeof ChatRoute
   FocusRoute: typeof FocusRoute
+  RecoveryRoute: typeof RecoveryRoute
   ApiChatRoute: typeof ApiChatRoute
   ClinicImportRoute: typeof ClinicImportRoute
   WorkoutIdRoute: typeof WorkoutIdRoute
@@ -123,6 +136,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/recovery': {
+      id: '/recovery'
+      path: '/recovery'
+      fullPath: '/recovery'
+      preLoaderRoute: typeof RecoveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/focus': {
       id: '/focus'
       path: '/focus'
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChatRoute: ChatRoute,
   FocusRoute: FocusRoute,
+  RecoveryRoute: RecoveryRoute,
   ApiChatRoute: ApiChatRoute,
   ClinicImportRoute: ClinicImportRoute,
   WorkoutIdRoute: WorkoutIdRoute,
@@ -187,13 +208,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
