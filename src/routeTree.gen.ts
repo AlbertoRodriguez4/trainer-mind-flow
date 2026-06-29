@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RecoveryRouteImport } from './routes/recovery'
 import { Route as FocusRouteImport } from './routes/focus'
+import { Route as DevicesRouteImport } from './routes/devices'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
@@ -26,6 +27,11 @@ const RecoveryRoute = RecoveryRouteImport.update({
 const FocusRoute = FocusRouteImport.update({
   id: '/focus',
   path: '/focus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevicesRoute = DevicesRouteImport.update({
+  id: '/devices',
+  path: '/devices',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChatRoute = ChatRouteImport.update({
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
+  '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
+  '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
+  '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/chat'
+    | '/devices'
     | '/focus'
     | '/recovery'
     | '/api/chat'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/chat'
+    | '/devices'
     | '/focus'
     | '/recovery'
     | '/api/chat'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/chat'
+    | '/devices'
     | '/focus'
     | '/recovery'
     | '/api/chat'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   ChatRoute: typeof ChatRoute
+  DevicesRoute: typeof DevicesRoute
   FocusRoute: typeof FocusRoute
   RecoveryRoute: typeof RecoveryRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -148,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/focus'
       fullPath: '/focus'
       preLoaderRoute: typeof FocusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devices': {
+      id: '/devices'
+      path: '/devices'
+      fullPath: '/devices'
+      preLoaderRoute: typeof DevicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chat': {
@@ -199,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   ChatRoute: ChatRoute,
+  DevicesRoute: DevicesRoute,
   FocusRoute: FocusRoute,
   RecoveryRoute: RecoveryRoute,
   ApiChatRoute: ApiChatRoute,

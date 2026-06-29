@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Sparkles, Watch, Smartphone, Ring, RefreshCw } from "lucide-react";
+import { ArrowLeft, Sparkles, Watch, Smartphone, Circle as Ring, RefreshCw } from "lucide-react";
 
 /* ─────────────── Conceptual theme tokens ─────────────── */
 const theme = {
