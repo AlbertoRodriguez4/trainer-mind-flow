@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Sparkles, Play, Hop as Home, Dumbbell, Apple, Activity, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Heart, Camera, ScanLine, FileText, Upload, TriangleAlert as AlertTriangle, Image as ImageIcon, TrendingDown, TrendingUp, CircleUser, Mic } from "lucide-react";
 import logoAsset from "@/assets/traainer-logo.jpg.asset.json";
 
@@ -646,7 +646,10 @@ function ClinicScreen() {
 
 function ClinicalImporter() {
   return (
-    <button className="group block w-full rounded-[28px] border-2 border-dashed border-border bg-card p-6 text-left shadow-soft transition hover:border-foreground/30 active:scale-[0.99]">
+    <Link
+      to="/clinic/import"
+      className="group block w-full rounded-[28px] border-2 border-dashed border-border bg-card p-6 text-left shadow-soft transition hover:border-foreground/30 active:scale-[0.99]"
+    >
       <div className="flex items-center gap-4">
         <div className="grid h-12 w-12 place-items-center rounded-2xl bg-ai-soft">
           <Upload className="h-5 w-5 text-foreground" strokeWidth={2.25} />
@@ -658,7 +661,7 @@ function ClinicalImporter() {
           </p>
         </div>
       </div>
-    </button>
+    </Link>
   );
 }
 
@@ -716,6 +719,13 @@ function CompositionChart() {
 }
 
 function PostureMesh() {
+  const captures = [
+    { id: "c4", label: "Hoy", date: "25 jun", tilt: -1, current: true },
+    { id: "c3", label: "May", date: "10 may", tilt: -3 },
+    { id: "c2", label: "Mar", date: "02 mar", tilt: -5 },
+    { id: "c1", label: "Ene", date: "14 ene", tilt: -8, muted: true },
+  ];
+  const camRef = useRef<HTMLInputElement>(null);
   return (
     <section className="rounded-[28px] bg-card p-5 shadow-card">
       <div className="flex items-center justify-between">
@@ -732,6 +742,61 @@ function PostureMesh() {
       <div className="mt-4 grid grid-cols-2 gap-3">
         <MeshFigure label="Ene" tilt={-8} muted />
         <MeshFigure label="Hoy" tilt={-1} />
+      </div>
+
+      <button
+        onClick={() => camRef.current?.click()}
+        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-ai-gradient px-5 py-3.5 text-[14px] font-semibold text-white shadow-card transition active:scale-[0.99]"
+      >
+        <Camera className="h-4 w-4" strokeWidth={2.25} />
+        Tomar nueva imagen
+      </button>
+      <input
+        ref={camRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+      />
+
+      <div className="mt-5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Calendario de capturas
+        </p>
+        <ul className="mt-3 space-y-2">
+          {captures.map((c) => (
+            <li
+              key={c.id}
+              className="flex items-center gap-3 rounded-2xl bg-surface-1 px-3 py-2.5"
+            >
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-card text-center leading-none ring-1 ring-border">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase text-muted-foreground">
+                    {c.date.split(" ")[1]}
+                  </p>
+                  <p className="text-[13px] font-bold text-foreground">
+                    {c.date.split(" ")[0]}
+                  </p>
+                </div>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-semibold leading-tight">
+                  Captura {c.label}
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  Inclinación {c.tilt}° · malla 3D
+                </p>
+              </div>
+              {c.current ? (
+                <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                  Actual
+                </span>
+              ) : (
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
