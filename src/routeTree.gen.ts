@@ -14,6 +14,7 @@ import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkoutIdRouteImport } from './routes/workout.$id'
+import { Route as ClinicImportRouteImport } from './routes/clinic.import'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const FocusRoute = FocusRouteImport.update({
@@ -41,6 +42,11 @@ const WorkoutIdRoute = WorkoutIdRouteImport.update({
   path: '/workout/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClinicImportRoute = ClinicImportRouteImport.update({
+  id: '/clinic/import',
+  path: '/clinic/import',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
   '/api/chat': typeof ApiChatRoute
+  '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
   '/api/chat': typeof ApiChatRoute
+  '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRoutesById {
@@ -70,13 +78,28 @@ export interface FileRoutesById {
   '/chat': typeof ChatRoute
   '/focus': typeof FocusRoute
   '/api/chat': typeof ApiChatRoute
+  '/clinic/import': typeof ClinicImportRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/chat' | '/focus' | '/api/chat' | '/workout/$id'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/chat'
+    | '/focus'
+    | '/api/chat'
+    | '/clinic/import'
+    | '/workout/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/chat' | '/focus' | '/api/chat' | '/workout/$id'
+  to:
+    | '/'
+    | '/auth'
+    | '/chat'
+    | '/focus'
+    | '/api/chat'
+    | '/clinic/import'
+    | '/workout/$id'
   id:
     | '__root__'
     | '/'
@@ -84,6 +107,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/focus'
     | '/api/chat'
+    | '/clinic/import'
     | '/workout/$id'
   fileRoutesById: FileRoutesById
 }
@@ -93,6 +117,7 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRoute
   FocusRoute: typeof FocusRoute
   ApiChatRoute: typeof ApiChatRoute
+  ClinicImportRoute: typeof ClinicImportRoute
   WorkoutIdRoute: typeof WorkoutIdRoute
 }
 
@@ -133,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkoutIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clinic/import': {
+      id: '/clinic/import'
+      path: '/clinic/import'
+      fullPath: '/clinic/import'
+      preLoaderRoute: typeof ClinicImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -149,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRoute,
   FocusRoute: FocusRoute,
   ApiChatRoute: ApiChatRoute,
+  ClinicImportRoute: ClinicImportRoute,
   WorkoutIdRoute: WorkoutIdRoute,
 }
 export const routeTree = rootRouteImport
