@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RecoveryRouteImport } from './routes/recovery'
+import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as FocusRouteImport } from './routes/focus'
 import { Route as DevicesRouteImport } from './routes/devices'
 import { Route as ChatRouteImport } from './routes/chat'
@@ -22,6 +23,11 @@ import { Route as ApiChatRouteImport } from './routes/api/chat'
 const RecoveryRoute = RecoveryRouteImport.update({
   id: '/recovery',
   path: '/recovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FocusRoute = FocusRouteImport.update({
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ChatRoute
   '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/progress': typeof ProgressRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/chat': typeof ChatRoute
   '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/progress': typeof ProgressRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/chat': typeof ChatRoute
   '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/progress': typeof ProgressRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/devices'
     | '/focus'
+    | '/progress'
     | '/recovery'
     | '/api/chat'
     | '/clinic/import'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/devices'
     | '/focus'
+    | '/progress'
     | '/recovery'
     | '/api/chat'
     | '/clinic/import'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/devices'
     | '/focus'
+    | '/progress'
     | '/recovery'
     | '/api/chat'
     | '/clinic/import'
@@ -141,6 +153,7 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRoute
   DevicesRoute: typeof DevicesRoute
   FocusRoute: typeof FocusRoute
+  ProgressRoute: typeof ProgressRoute
   RecoveryRoute: typeof RecoveryRoute
   ApiChatRoute: typeof ApiChatRoute
   ClinicImportRoute: typeof ClinicImportRoute
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/recovery'
       fullPath: '/recovery'
       preLoaderRoute: typeof RecoveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/focus': {
@@ -221,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRoute,
   DevicesRoute: DevicesRoute,
   FocusRoute: FocusRoute,
+  ProgressRoute: ProgressRoute,
   RecoveryRoute: RecoveryRoute,
   ApiChatRoute: ApiChatRoute,
   ClinicImportRoute: ClinicImportRoute,
@@ -229,13 +250,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
