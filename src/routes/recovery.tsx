@@ -1,31 +1,34 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Sparkles, TriangleAlert as AlertTriangle, Moon, Heart, Activity } from "lucide-react";
 
-/* ─────────────── Conceptual theme tokens ─────────────── */
+/* ─────────────── Apple-style light tokens ─────────────── */
 const theme = {
-  bg: "#111318",
-  fg: "#F9F9FC",
-  card: "#23262F",
-  surface1: "#1B1D24",
-  label: "#9DA0AE",
+  bg: "#F5F5F7",
+  fg: "#1D1D1F",
+  card: "#FFFFFF",
+  surface1: "#F5F5F7",
+  surface2: "#ECECEF",
+  label: "#6E6E73",
+  border: "rgba(0,0,0,0.06)",
   aiFrom: "#B054F0",
   aiVia: "#6A5CF0",
   aiTo: "#46B5E8",
-  glassFrom: "#EEDBFC",
-  glassTo: "#DCEBFB",
-  alertFrom: "#FBE8B0",
-  alertTo: "#F4D785",
-  alertText: "#9A3412",
-  alertIcon: "#C2410C",
-  radius: 28,
+  glassFrom: "#F3E8FF",
+  glassTo: "#E5F0FE",
+  alertFrom: "#FFF4D6",
+  alertTo: "#FFE3B0",
+  alertText: "#8A4B10",
+  alertIcon: "#B45309",
+  radius: 24,
+  cardShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.08)",
 } as const;
 
 const aiGradient = `linear-gradient(135deg, ${theme.aiFrom} 0%, ${theme.aiVia} 50%, ${theme.aiTo} 100%)`;
 const heroGradient = `linear-gradient(135deg, ${theme.glassFrom}, ${theme.glassTo})`;
 const alertGradient = `linear-gradient(135deg, ${theme.alertFrom}, ${theme.alertTo})`;
 
-const titleFont = { fontFamily: "Outfit, Inter, sans-serif", fontWeight: 800, letterSpacing: "-0.5px" } as const;
-const bodyFont = { fontFamily: "Manrope, Inter, sans-serif" } as const;
+const titleFont = { fontFamily: "Inter, -apple-system, 'SF Pro Display', sans-serif", fontWeight: 700, letterSpacing: "-0.02em" } as const;
+const bodyFont = { fontFamily: "Inter, -apple-system, 'SF Pro Text', sans-serif" } as const;
 const labelStyle = {
   fontSize: 11, fontWeight: 600, letterSpacing: "1.4px",
   color: theme.label, textTransform: "uppercase" as const,
@@ -174,15 +177,15 @@ function SleepStagesCard() {
     { label: "Profundo", pct: 12, color: theme.aiFrom },
     { label: "REM", pct: 19, color: theme.aiVia },
     { label: "Ligero", pct: 54, color: theme.aiTo },
-    { label: "Despierto", pct: 15, color: "#3A3F4D" },
+    { label: "Despierto", pct: 15, color: "#C7C7CC" },
   ];
   return (
-    <section style={{ background: theme.card, borderRadius: theme.radius, padding: 20 }}>
+    <section style={{ background: theme.card, borderRadius: theme.radius, padding: 20, boxShadow: theme.cardShadow }}>
       <div className="flex items-center justify-between">
         <p style={labelStyle}>Fases del sueño</p>
         <span style={{ fontSize: 11, color: theme.label, ...bodyFont }}>7h 25m en cama</span>
       </div>
-      <div className="mt-4 flex h-3 w-full overflow-hidden rounded-full" style={{ background: theme.surface1 }}>
+      <div className="mt-4 flex h-3 w-full overflow-hidden rounded-full" style={{ background: theme.surface2 }}>
         {stages.map((s) => (
           <div key={s.label} style={{ width: `${s.pct}%`, background: s.color }} />
         ))}
@@ -202,7 +205,7 @@ function SleepStagesCard() {
         className="mt-5 flex items-center gap-2 rounded-2xl px-3 py-2.5"
         style={{ background: theme.surface1 }}
       >
-        <Activity className="h-4 w-4" style={{ color: theme.aiTo }} strokeWidth={2.25} />
+        <Activity className="h-4 w-4" style={{ color: theme.aiVia }} strokeWidth={2.25} />
         <p style={{ fontSize: 12, color: theme.fg, ...bodyFont }}>
           VFC nocturna <span style={{ fontWeight: 700 }}>+8%</span> vs media semanal.
         </p>
