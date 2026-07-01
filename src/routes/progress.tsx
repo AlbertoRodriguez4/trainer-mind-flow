@@ -13,26 +13,27 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-/* ─────────────── Tokens (aligned with /recovery & /devices) ─────────────── */
+/* ─────────────── Apple-style light tokens ─────────────── */
 const theme = {
-  bg: "#0B0D12",
-  fg: "#F4F6FB",
-  card: "#161922",
-  surface1: "#1B1F2A",
-  surface2: "#222734",
-  label: "#8B90A0",
-  border: "rgba(255,255,255,0.06)",
-  blue: "#3B82F6",
-  blueSoft: "#60A5FA",
-  green: "#22C55E",
-  red: "#EF4444",
-  orange: "#F59E0B",
-  gray: "#2A2F3C",
-  radius: 24,
+  bg: "#F5F5F7",
+  fg: "#1D1D1F",
+  card: "#FFFFFF",
+  surface1: "#F5F5F7",
+  surface2: "#ECECEF",
+  label: "#6E6E73",
+  border: "rgba(0,0,0,0.06)",
+  blue: "#0A84FF",
+  blueSoft: "#5AC8FA",
+  green: "#30D158",
+  red: "#FF3B30",
+  orange: "#FF9F0A",
+  gray: "#E5E5EA",
+  radius: 22,
+  cardShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.08)",
 } as const;
 
-const titleFont = { fontFamily: "Outfit, Inter, sans-serif", fontWeight: 800, letterSpacing: "-0.5px" } as const;
-const bodyFont = { fontFamily: "Manrope, Inter, sans-serif" } as const;
+const titleFont = { fontFamily: "Inter, -apple-system, 'SF Pro Display', sans-serif", fontWeight: 700, letterSpacing: "-0.02em" } as const;
+const bodyFont = { fontFamily: "Inter, -apple-system, 'SF Pro Text', sans-serif" } as const;
 const labelStyle = {
   fontSize: 11,
   fontWeight: 600,
