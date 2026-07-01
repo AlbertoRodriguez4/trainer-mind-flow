@@ -43,7 +43,7 @@ const STEPS: Step[] = [
     eyebrow: "01 · Dispositivos",
     title: (
       <>
-        Tu cuerpo, <span className="text-onb-neon-cyan">en vivo</span>.
+        Tu cuerpo, <span className="text-[#22D3EE]">en vivo</span>.
       </>
     ),
     body:
@@ -60,7 +60,7 @@ const STEPS: Step[] = [
     eyebrow: "02 · Health Connect",
     title: (
       <>
-        Tu historial es el <span className="text-onb-neon-lime">combustible</span>.
+        Tu historial es el <span className="text-[#A3E635]">combustible</span>.
       </>
     ),
     body:
@@ -77,7 +77,7 @@ const STEPS: Step[] = [
     eyebrow: "03 · IA Personal",
     title: (
       <>
-        Un coach que <span className="text-onb-neon-violet">te entiende</span>.
+        Un coach que <span className="text-[#C084FC]">te entiende</span>.
       </>
     ),
     body:
@@ -261,7 +261,7 @@ function DeviceVisual() {
       <div className="relative flex h-28 w-20 flex-col items-center justify-center rounded-[22px] border border-white/15 bg-gradient-to-b from-white/10 to-white/[0.02] shadow-2xl backdrop-blur-md">
         <div className="absolute -top-1.5 h-2 w-8 rounded-t-md bg-white/20" />
         <div className="absolute -bottom-1.5 h-2 w-8 rounded-b-md bg-white/20" />
-        <HeartPulse className="h-6 w-6 text-onb-neon-cyan animate-ai-pulse" />
+        <HeartPulse className="h-6 w-6 text-[#22D3EE] animate-ai-pulse" />
         <span className="mt-1 text-[10px] font-semibold tabular-nums text-white/85">
           142
         </span>
@@ -296,7 +296,7 @@ function HealthVisual() {
           style={{ animation: `fade-in 0.5s ${i * 0.08}s both` }}
         >
           <div className="flex items-center justify-between">
-            <Icon className="h-4 w-4 text-onb-neon-lime" />
+            <Icon className="h-4 w-4 text-[#A3E635]" />
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
           </div>
           <div className="mt-2 text-[15px] font-bold tabular-nums text-white">
