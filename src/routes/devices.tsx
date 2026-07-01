@@ -81,7 +81,7 @@ function DeviceBadge() {
       }}
     >
       <span className="h-2 w-2 rounded-full" style={{ background: theme.badgeDot }} />
-      <span style={{ ...labelStyle, fontSize: 9, color: theme.fg }}>Device</span>
+      <span style={{ ...labelStyle, fontSize: 9, color: "#FFFFFF" }}>Device</span>
     </span>
   );
 }
