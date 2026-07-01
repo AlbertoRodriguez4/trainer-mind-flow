@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RecoveryRouteImport } from './routes/recovery'
 import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as FocusRouteImport } from './routes/focus'
 import { Route as DevicesRouteImport } from './routes/devices'
 import { Route as ChatRouteImport } from './routes/chat'
@@ -28,6 +29,11 @@ const RecoveryRoute = RecoveryRouteImport.update({
 const ProgressRoute = ProgressRouteImport.update({
   id: '/progress',
   path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FocusRoute = FocusRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ChatRoute
   '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/onboarding': typeof OnboardingRoute
   '/progress': typeof ProgressRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/chat': typeof ChatRoute
   '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/onboarding': typeof OnboardingRoute
   '/progress': typeof ProgressRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/chat': typeof ChatRoute
   '/devices': typeof DevicesRoute
   '/focus': typeof FocusRoute
+  '/onboarding': typeof OnboardingRoute
   '/progress': typeof ProgressRoute
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/devices'
     | '/focus'
+    | '/onboarding'
     | '/progress'
     | '/recovery'
     | '/api/chat'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/devices'
     | '/focus'
+    | '/onboarding'
     | '/progress'
     | '/recovery'
     | '/api/chat'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/devices'
     | '/focus'
+    | '/onboarding'
     | '/progress'
     | '/recovery'
     | '/api/chat'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRoute
   DevicesRoute: typeof DevicesRoute
   FocusRoute: typeof FocusRoute
+  OnboardingRoute: typeof OnboardingRoute
   ProgressRoute: typeof ProgressRoute
   RecoveryRoute: typeof RecoveryRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/progress'
       fullPath: '/progress'
       preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/focus': {
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRoute,
   DevicesRoute: DevicesRoute,
   FocusRoute: FocusRoute,
+  OnboardingRoute: OnboardingRoute,
   ProgressRoute: ProgressRoute,
   RecoveryRoute: RecoveryRoute,
   ApiChatRoute: ApiChatRoute,
