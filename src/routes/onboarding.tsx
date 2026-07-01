@@ -99,19 +99,19 @@ function OnboardingScreen() {
   const isLast = step === STEPS.length - 1;
 
   return (
-    <div className="min-h-screen w-full bg-[#07070C] text-white">
+    <div className="min-h-screen w-full bg-[#F5F5F7] text-[#1D1D1F]">
       {/* Ambient light */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div
           className="absolute -top-40 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full opacity-40 blur-[120px] transition-all duration-700"
           style={{ background: s.accent }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.06),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(0,0,0,0.05),transparent_60%)]" />
         <div
           className="absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px)",
+              "linear-gradient(rgba(0,0,0,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.5) 1px,transparent 1px)",
             backgroundSize: "44px 44px",
           }}
         />
@@ -124,7 +124,7 @@ function OnboardingScreen() {
             <img
               src={logoAsset.url}
               alt=""
-              className="h-8 w-8 rounded-xl object-cover ring-1 ring-white/15"
+              className="h-8 w-8 rounded-xl object-cover ring-1 ring-black/[0.08]"
             />
             <span className="text-[13px] font-semibold tracking-tight">
               Personal Tr<span className="text-ai-gradient">AI</span>ner
@@ -132,7 +132,7 @@ function OnboardingScreen() {
           </div>
           <Link
             to="/auth"
-            className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/45 transition hover:text-white/80"
+            className="text-[11px] font-medium uppercase tracking-[0.14em] text-[#6E6E73] transition hover:text-[#1D1D1F]"
           >
             Saltar
           </Link>
@@ -147,7 +147,7 @@ function OnboardingScreen() {
               <button
                 key={i}
                 onClick={() => setStep(i)}
-                className="group h-1.5 flex-1 overflow-hidden rounded-full bg-white/8"
+                className="group h-1.5 flex-1 overflow-hidden rounded-full bg-black/[0.06]"
                 aria-label={`Paso ${i + 1}`}
               >
                 <span
@@ -165,7 +165,7 @@ function OnboardingScreen() {
         {/* Content */}
         <div key={step} className="mt-6 flex-1 animate-fade-in">
           {/* Visual card */}
-          <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl">
+          <div className="relative overflow-hidden rounded-[32px] border border-black/[0.06] bg-white p-6 backdrop-blur-xl">
             <div
               className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-50 blur-3xl"
               style={{ background: s.accent }}
@@ -175,19 +175,19 @@ function OnboardingScreen() {
             </div>
           </div>
 
-          <p className="mt-7 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">
+          <p className="mt-7 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#6E6E73]">
             {s.eyebrow}
           </p>
           <h1 className="mt-3 text-[30px] font-bold leading-[1.1] tracking-tight">
             {s.title}
           </h1>
-          <p className="mt-3 text-[14.5px] leading-relaxed text-white/65">{s.body}</p>
+          <p className="mt-3 text-[14.5px] leading-relaxed text-[#3A3A3C]">{s.body}</p>
 
           <ul className="mt-6 space-y-2.5">
             {s.bullets.map(({ icon: Icon, label }) => (
               <li
                 key={label}
-                className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.035] px-4 py-3"
+                className="flex items-center gap-3 rounded-2xl border border-black/[0.06] bg-white px-4 py-3"
               >
                 <span
                   className="flex h-8 w-8 items-center justify-center rounded-xl"
@@ -195,8 +195,8 @@ function OnboardingScreen() {
                 >
                   <Icon className="h-4 w-4 text-black/80" />
                 </span>
-                <span className="text-[13.5px] font-medium text-white/85">{label}</span>
-                <Check className="ml-auto h-4 w-4 text-white/30" strokeWidth={2.5} />
+                <span className="text-[13.5px] font-medium text-[#1D1D1F]">{label}</span>
+                <Check className="ml-auto h-4 w-4 text-[#1D1D1F]/30" strokeWidth={2.5} />
               </li>
             ))}
           </ul>
@@ -212,7 +212,7 @@ function OnboardingScreen() {
             className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl px-6 py-4 text-[15px] font-semibold text-black transition active:scale-[0.99]"
             style={{ background: s.accent }}
           >
-            <span className="absolute inset-0 bg-white/10 opacity-0 transition group-hover:opacity-100" />
+            <span className="absolute inset-0 bg-white opacity-0 transition group-hover:opacity-100" />
             <span className="relative">
               {isLast ? "Empezar a sincronizar" : "Continuar"}
             </span>
@@ -222,15 +222,15 @@ function OnboardingScreen() {
           {step > 0 ? (
             <button
               onClick={() => setStep(step - 1)}
-              className="w-full text-center text-[12px] font-medium text-white/50 transition hover:text-white/80"
+              className="w-full text-center text-[12px] font-medium text-[#6E6E73] transition hover:text-[#1D1D1F]"
             >
               Atrás
             </button>
           ) : (
-            <p className="text-center text-[11px] text-white/40">
+            <p className="text-center text-[11px] text-[#8E8E93]">
               Al continuar aceptas nuestros{" "}
-              <span className="text-white/70 underline underline-offset-2">Términos</span> y{" "}
-              <span className="text-white/70 underline underline-offset-2">Privacidad</span>.
+              <span className="text-[#3A3A3C] underline underline-offset-2">Términos</span> y{" "}
+              <span className="text-[#3A3A3C] underline underline-offset-2">Privacidad</span>.
             </p>
           )}
         </div>
@@ -258,14 +258,14 @@ function DeviceVisual() {
       ))}
 
       {/* Watch */}
-      <div className="relative flex h-28 w-20 flex-col items-center justify-center rounded-[22px] border border-white/15 bg-gradient-to-b from-white/10 to-white/[0.02] shadow-2xl backdrop-blur-md">
-        <div className="absolute -top-1.5 h-2 w-8 rounded-t-md bg-white/20" />
-        <div className="absolute -bottom-1.5 h-2 w-8 rounded-b-md bg-white/20" />
+      <div className="relative flex h-28 w-20 flex-col items-center justify-center rounded-[22px] border border-black/[0.08] bg-gradient-to-b from-white/10 to-white/[0.02] shadow-2xl backdrop-blur-md">
+        <div className="absolute -top-1.5 h-2 w-8 rounded-t-md bg-black/[0.12]" />
+        <div className="absolute -bottom-1.5 h-2 w-8 rounded-b-md bg-black/[0.12]" />
         <HeartPulse className="h-6 w-6 text-[#22D3EE] animate-ai-pulse" />
-        <span className="mt-1 text-[10px] font-semibold tabular-nums text-white/85">
+        <span className="mt-1 text-[10px] font-semibold tabular-nums text-[#1D1D1F]">
           142
         </span>
-        <span className="text-[8px] uppercase tracking-widest text-white/40">bpm</span>
+        <span className="text-[8px] uppercase tracking-widest text-[#8E8E93]">bpm</span>
       </div>
 
       {/* Floating chip */}
@@ -273,7 +273,7 @@ function DeviceVisual() {
         <Bluetooth className="h-3 w-3 text-cyan-200" />
         <span className="text-[10px] font-semibold text-cyan-100">Live</span>
       </div>
-      <div className="absolute bottom-3 left-2 rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-[10px] font-medium text-white/70 backdrop-blur">
+      <div className="absolute bottom-3 left-2 rounded-full border border-black/[0.08] bg-white px-2.5 py-1 text-[10px] font-medium text-[#3A3A3C] backdrop-blur">
         Redmi Watch 5
       </div>
     </div>
@@ -292,17 +292,17 @@ function HealthVisual() {
       {items.map(({ icon: Icon, label, sub }, i) => (
         <div
           key={label}
-          className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-3 backdrop-blur"
+          className="relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-3 backdrop-blur"
           style={{ animation: `fade-in 0.5s ${i * 0.08}s both` }}
         >
           <div className="flex items-center justify-between">
             <Icon className="h-4 w-4 text-[#A3E635]" />
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
           </div>
-          <div className="mt-2 text-[15px] font-bold tabular-nums text-white">
+          <div className="mt-2 text-[15px] font-bold tabular-nums text-[#1D1D1F]">
             {label}
           </div>
-          <div className="text-[10px] uppercase tracking-wider text-white/45">{sub}</div>
+          <div className="text-[10px] uppercase tracking-wider text-[#6E6E73]">{sub}</div>
         </div>
       ))}
     </div>
@@ -316,7 +316,7 @@ function AIVisual() {
       {[70, 105, 140].map((r, i) => (
         <span
           key={r}
-          className="absolute rounded-full border border-white/10"
+          className="absolute rounded-full border border-black/[0.06]"
           style={{ width: r * 2, height: r * 2 }}
         >
           <span
@@ -334,8 +334,8 @@ function AIVisual() {
       ))}
       {/* Core */}
       <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-ai-gradient shadow-[0_0_60px_rgba(192,132,252,0.55)]">
-        <div className="absolute inset-1 rounded-full bg-[#07070C]/60 backdrop-blur" />
-        <Sparkles className="relative h-7 w-7 text-white" />
+        <div className="absolute inset-1 rounded-full bg-[#F5F5F7]/60 backdrop-blur" />
+        <Sparkles className="relative h-7 w-7 text-[#1D1D1F]" />
       </div>
     </div>
   );
