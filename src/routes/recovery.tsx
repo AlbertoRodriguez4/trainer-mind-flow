@@ -93,18 +93,19 @@ function HeroGlassCard() {
         background: heroGradient,
         borderRadius: theme.radius,
         padding: 24,
-        boxShadow: "0 8px 32px -16px rgba(106,92,240,0.35)",
+        boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 12px 32px -16px rgba(106,92,240,0.22)",
+        border: `1px solid ${theme.border}`,
       }}
     >
-      <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full opacity-50 blur-3xl" style={{ background: aiGradient }} />
+      <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full opacity-30 blur-3xl" style={{ background: aiGradient }} />
       <div className="relative flex items-center gap-2.5">
         <div
           className="grid h-9 w-9 place-items-center rounded-full text-white"
-          style={{ background: aiGradient, boxShadow: "0 4px 14px -4px rgba(106,92,240,0.6)" }}
+          style={{ background: aiGradient, boxShadow: "0 4px 14px -4px rgba(106,92,240,0.45)" }}
         >
           <Sparkles className="h-4 w-4" strokeWidth={2.5} />
         </div>
-        <span style={{ ...labelStyle, color: "#3F2A6B" }}>Sueño · Esta noche</span>
+        <span style={{ ...labelStyle, color: "#4B2E83" }}>Sueño · Esta noche</span>
       </div>
       <h1
         className="relative mt-3 text-[26px] leading-tight bg-clip-text text-transparent"
@@ -112,7 +113,7 @@ function HeroGlassCard() {
       >
         Análisis de Recuperación
       </h1>
-      <p className="relative mt-2 text-[13px] leading-snug" style={{ color: "#3F2A6B", ...bodyFont }}>
+      <p className="relative mt-2 text-[13px] leading-snug" style={{ color: "#4B2E83", ...bodyFont }}>
         Tu organismo necesita una jornada ligera. La IA ha recalibrado tu plan en función del descanso.
       </p>
     </section>
@@ -158,12 +159,12 @@ function StatPillsRow() {
       {stats.map(({ icon: Icon, label, value }) => (
         <div
           key={label}
-          style={{ background: theme.surface1, borderRadius: 16, padding: 12 }}
+          style={{ background: theme.card, borderRadius: 18, padding: 14, boxShadow: theme.cardShadow, border: `1px solid ${theme.border}` }}
           className="flex flex-col gap-2"
         >
-          <Icon className="h-3.5 w-3.5" style={{ color: theme.label }} strokeWidth={2} />
+          <Icon className="h-3.5 w-3.5" style={{ color: theme.aiVia }} strokeWidth={2} />
           <p style={{ ...labelStyle, fontSize: 9 }}>{label}</p>
-          <p style={{ fontSize: 13, fontWeight: 700, color: theme.fg, ...bodyFont, lineHeight: 1.1 }}>
+          <p style={{ fontSize: 15, fontWeight: 700, color: theme.fg, ...bodyFont, lineHeight: 1.1, letterSpacing: "-0.01em" }}>
             {value}
           </p>
         </div>
