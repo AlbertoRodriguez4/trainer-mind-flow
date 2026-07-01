@@ -184,7 +184,7 @@ function NutritionCalendar() {
 
   return (
     <>
-      <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18 }}>
+      <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18, boxShadow: theme.cardShadow, border: `1px solid ${theme.border}` }}>
         <MonthHeader title="Junio 2026" />
         <div className="mt-4">
           <Weekdays />
@@ -285,7 +285,7 @@ function MonthlySummary({ items }: { items: { label: string; value: string }[] }
   return (
     <section className="grid grid-cols-3 gap-3">
       {items.map((i) => (
-        <div key={i.label} style={{ background: theme.card, borderRadius: 18, padding: 14 }}>
+        <div key={i.label} style={{ background: theme.card, borderRadius: 18, padding: 14, boxShadow: theme.cardShadow, border: `1px solid ${theme.border}` }}>
           <p style={{ ...labelStyle, fontSize: 9 }}>{i.label}</p>
           <p className="mt-1.5" style={{ ...titleFont, fontSize: 18, color: theme.fg }}>
             {i.value}
@@ -449,7 +449,7 @@ function TrainingCalendar() {
 
   return (
     <>
-      <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18 }}>
+      <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18, boxShadow: theme.cardShadow, border: `1px solid ${theme.border}` }}>
         <MonthHeader title="Junio 2026" />
         <div className="mt-4">
           <Weekdays />
@@ -514,7 +514,7 @@ function WeeklyVolumeChart() {
   ];
   const max = Math.max(...weeks.map((w) => w.tonnage));
   return (
-    <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18 }}>
+    <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18, boxShadow: theme.cardShadow, border: `1px solid ${theme.border}` }}>
       <div className="flex items-baseline justify-between">
         <p style={labelStyle}>Volumen semanal · Tonelaje</p>
         <span style={{ fontSize: 11, color: theme.green, fontWeight: 600 }}>+18% vs mes anterior</span>
@@ -559,7 +559,7 @@ function WeeklyVolumeChart() {
 function UnifiedInsights() {
   return (
     <>
-      <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18 }}>
+      <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18, boxShadow: theme.cardShadow, border: `1px solid ${theme.border}` }}>
         <div className="flex items-baseline justify-between">
           <p style={labelStyle}>Entrenamientos completados</p>
           <span style={{ fontSize: 11, color: theme.label }}>últimas 8 semanas</span>
@@ -693,7 +693,7 @@ function CorrelationPanel() {
     },
   ];
   return (
-    <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18 }}>
+    <section style={{ background: theme.card, borderRadius: theme.radius, padding: 18, boxShadow: theme.cardShadow, border: `1px solid ${theme.border}` }}>
       <p style={labelStyle}>Correlaciones IA</p>
       <ul className="mt-4 space-y-2.5">
         {correlations.map((c) => (
