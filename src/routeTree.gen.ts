@@ -18,6 +18,7 @@ import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkoutIdRouteImport } from './routes/workout.$id'
+import { Route as RoutineQuickAddRouteImport } from './routes/routine.quick-add'
 import { Route as ClinicImportRouteImport } from './routes/clinic.import'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
@@ -66,6 +67,11 @@ const WorkoutIdRoute = WorkoutIdRouteImport.update({
   path: '/workout/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoutineQuickAddRoute = RoutineQuickAddRouteImport.update({
+  id: '/routine/quick-add',
+  path: '/routine/quick-add',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClinicImportRoute = ClinicImportRouteImport.update({
   id: '/clinic/import',
   path: '/clinic/import',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
+  '/routine/quick-add': typeof RoutineQuickAddRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
+  '/routine/quick-add': typeof RoutineQuickAddRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/recovery': typeof RecoveryRoute
   '/api/chat': typeof ApiChatRoute
   '/clinic/import': typeof ClinicImportRoute
+  '/routine/quick-add': typeof RoutineQuickAddRoute
   '/workout/$id': typeof WorkoutIdRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/recovery'
     | '/api/chat'
     | '/clinic/import'
+    | '/routine/quick-add'
     | '/workout/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/recovery'
     | '/api/chat'
     | '/clinic/import'
+    | '/routine/quick-add'
     | '/workout/$id'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/recovery'
     | '/api/chat'
     | '/clinic/import'
+    | '/routine/quick-add'
     | '/workout/$id'
   fileRoutesById: FileRoutesById
 }
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   RecoveryRoute: typeof RecoveryRoute
   ApiChatRoute: typeof ApiChatRoute
   ClinicImportRoute: typeof ClinicImportRoute
+  RoutineQuickAddRoute: typeof RoutineQuickAddRoute
   WorkoutIdRoute: typeof WorkoutIdRoute
 }
 
@@ -238,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkoutIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/routine/quick-add': {
+      id: '/routine/quick-add'
+      path: '/routine/quick-add'
+      fullPath: '/routine/quick-add'
+      preLoaderRoute: typeof RoutineQuickAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clinic/import': {
       id: '/clinic/import'
       path: '/clinic/import'
@@ -266,18 +286,9 @@ const rootRouteChildren: RootRouteChildren = {
   RecoveryRoute: RecoveryRoute,
   ApiChatRoute: ApiChatRoute,
   ClinicImportRoute: ClinicImportRoute,
+  RoutineQuickAddRoute: RoutineQuickAddRoute,
   WorkoutIdRoute: WorkoutIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
