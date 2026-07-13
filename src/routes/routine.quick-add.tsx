@@ -14,6 +14,10 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/routine/quick-add")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    activity: (search.activity as ActivityType | undefined) ?? "gym",
+    day: (search.day as string | undefined) ?? "Lunes",
+  }),
   head: () => ({
     meta: [
       { title: "Añadir ejercicios rápido — Personal TrAIner" },
