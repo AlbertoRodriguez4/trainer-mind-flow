@@ -264,6 +264,76 @@ function MessageBubble({ message }: { message: UIMessage }) {
     return [];
   });
   const isUser = message.role === "user";
+  const [confirmState, setConfirmState] = useState<"pending" | "confirmed" | "cancelled">(
+    "pending",
+  );
+
+  if (!isUser) {
+    const parsed = parseAssistantText(text);
+    if (parsed.kind === "action") {
+      return (
+        <div className="flex justify-start">
+          <div className="max-w-[88%] rounded-[20px] rounded-bl-md border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 shadow-soft">
+            <div className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                  Acción realizada
+                </p>
+                <p className="mt-0.5 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">
+                  {parsed.text}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    if (parsed.kind === "confirm") {
+      return (
+        <div className="flex justify-start">
+          <div className="max-w-[88%] rounded-[20px] rounded-bl-md border border-amber-500/40 bg-warn-soft px-4 py-3 shadow-soft">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-amber-800">
+                  Confirmación pendiente
+                </p>
+                <p className="mt-0.5 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">
+                  {parsed.text}
+                </p>
+                {confirmState === "pending" ? (
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setConfirmState("confirmed")}
+                      className="bg-ai-gradient inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[13px] font-semibold text-white shadow-soft transition-opacity hover:opacity-95"
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                      Confirmar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmState("cancelled")}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-1.5 text-[13px] font-semibold text-foreground/80 ring-1 ring-border transition-colors hover:bg-surface-1"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                      Cancelar
+                    </button>
+                  </div>
+                ) : (
+                  <p className="mt-2 text-[12px] font-medium text-muted-foreground">
+                    {confirmState === "confirmed" ? "Confirmado" : "Cancelado"}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div className={isUser ? "flex max-w-[82%] flex-col items-end gap-1.5" : "max-w-[88%]"}>
