@@ -153,7 +153,7 @@ function ChatScreen() {
                 className="h-8 w-8 rounded-lg object-cover ring-1 ring-border"
               />
               <div className="min-w-0">
-                <p className="truncate text-[15px] font-semibold leading-tight">AI Coach</p>
+                <p className="truncate text-[15px] font-semibold leading-tight">Nova</p>
                 <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   En línea · contexto de tus datos
@@ -161,6 +161,7 @@ function ChatScreen() {
               </div>
             </div>
           </div>
+          <ModuleChip module={inferModule(messages)} />
         </header>
 
         <main className="flex-1 px-4 pb-40 pt-4">
