@@ -375,6 +375,26 @@ function TypingIndicator() {
   );
 }
 
+function ModuleChip({ module }: { module: NovaModule }) {
+  const { label, Icon } = module;
+  return (
+    <div className="flex items-center justify-center px-4 pb-3">
+      <div
+        key={module.id}
+        className="animate-fade-in inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-3 py-1 text-[11px] font-medium text-foreground/70 ring-1 ring-border"
+      >
+        <span className="bg-ai-gradient inline-flex h-4 w-4 items-center justify-center rounded-full text-white">
+          <Icon className="h-2.5 w-2.5" />
+        </span>
+        <span className="uppercase tracking-wide text-[10px] text-muted-foreground">
+          Nova · módulo
+        </span>
+        <span className="text-foreground">{label}</span>
+      </div>
+    </div>
+  );
+}
+
 function EmptyState({ onPick }: { onPick: (t: string) => void }) {
   return (
     <div className="flex flex-col items-center pt-10 text-center">
