@@ -2,7 +2,20 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowUp, Sparkles, Paperclip, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUp,
+  Sparkles,
+  Paperclip,
+  X,
+  Check,
+  CheckCircle2,
+  AlertTriangle,
+  Dumbbell,
+  ClipboardCheck,
+  Moon,
+  LineChart,
+} from "lucide-react";
 import logoAsset from "@/assets/traainer-logo.jpg.asset.json";
 
 export const Route = createFileRoute("/chat")({
@@ -18,6 +31,56 @@ const SUGGESTIONS = [
   "Rutina rápida de 20 min",
   "Interpreta mi última FC media",
 ];
+
+type NovaModule = {
+  id: "builder" | "reviewer" | "sleep" | "progress";
+  label: string;
+  Icon: typeof Dumbbell;
+};
+
+const NOVA_MODULES: Record<NovaModule["id"], NovaModule> = {
+  builder: { id: "builder", label: "Creador de Rutina", Icon: Dumbbell },
+  reviewer: { id: "reviewer", label: "Revisor de Rutina", Icon: ClipboardCheck },
+  sleep: { id: "sleep", label: "Análisis de Sueño", Icon: Moon },
+  progress: { id: "progress", label: "Seguimiento de Progreso", Icon: LineChart },
+};
+
+function inferModule(messages: UIMessage[]): NovaModule {
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const text = messages[i].parts
+      .map((p) => (p.type === "text" ? p.text : ""))
+      .join(" ")
+      .toLowerCase();
+    if (!text) continue;
+    if (/(sueñ|dormir|descans|recuperaci)/.test(text)) return NOVA_MODULES.sleep;
+    if (/(progres|tonelaje|volumen|grasa|peso corporal)/.test(text)) return NOVA_MODULES.progress;
+    if (/(revis|analiza|evalu|opini).*rutina|rutina.*(revis|analiza)/.test(text))
+      return NOVA_MODULES.reviewer;
+    if (/(crear|nueva|diseñ|arma|genera).*rutina|rutina.*(crear|nueva)/.test(text))
+      return NOVA_MODULES.builder;
+  }
+  return NOVA_MODULES.builder;
+}
+
+/**
+ * Convenciones de marcado en la respuesta del modelo para renderizar
+ * variantes especiales de burbuja:
+ *   ::action:: Rutina creada         → burbuja de "acción confirmada"
+ *   ::confirm:: ¿Eliminar rutina X?  → burbuja de "confirmación pendiente"
+ */
+type ParsedBubble =
+  | { kind: "text"; text: string }
+  | { kind: "action"; text: string }
+  | { kind: "confirm"; text: string };
+
+function parseAssistantText(text: string): ParsedBubble {
+  const trimmed = text.trim();
+  if (trimmed.startsWith("::action::"))
+    return { kind: "action", text: trimmed.replace(/^::action::\s*/, "") };
+  if (trimmed.startsWith("::confirm::"))
+    return { kind: "confirm", text: trimmed.replace(/^::confirm::\s*/, "") };
+  return { kind: "text", text };
+}
 
 function ChatScreen() {
   const [input, setInput] = useState("");
