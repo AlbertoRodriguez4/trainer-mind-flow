@@ -153,7 +153,7 @@ function ChatScreen() {
                 className="h-8 w-8 rounded-lg object-cover ring-1 ring-border"
               />
               <div className="min-w-0">
-                <p className="truncate text-[15px] font-semibold leading-tight">Nova</p>
+                <p className="truncate text-[15px] font-semibold leading-tight">Pulso</p>
                 <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   En línea · contexto de tus datos
@@ -387,7 +387,7 @@ function ModuleChip({ module }: { module: NovaModule }) {
           <Icon className="h-2.5 w-2.5" />
         </span>
         <span className="uppercase tracking-wide text-[10px] text-muted-foreground">
-          Nova · módulo
+          Pulso · módulo
         </span>
         <span className="text-foreground">{label}</span>
       </div>
