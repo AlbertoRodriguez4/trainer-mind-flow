@@ -8,6 +8,7 @@ import {
   Dumbbell, Bike, HeartPulse, Wind, Trophy, Pencil, Trash2, Zap,
   Search, Copy, GripVertical, Check,
   AlertTriangle,
+  CheckCircle2, ClipboardCheck, LineChart,
 } from 'lucide-react';
 import { useNav } from './nav';
 
@@ -38,6 +39,124 @@ const SUGGESTIONS = [
   'Rutina rápida de 20 min',
   'Interpreta mi última FC media',
 ];
+
+type PulsoModule = {
+  id: 'builder' | 'reviewer' | 'sleep' | 'progress';
+  label: string;
+  Icon: typeof Dumbbell;
+};
+
+const PULSO_MODULES: Record<PulsoModule['id'], PulsoModule> = {
+  builder: { id: 'builder', label: 'Creador de Rutina', Icon: Dumbbell },
+  reviewer: { id: 'reviewer', label: 'Revisor de Rutina', Icon: ClipboardCheck },
+  sleep: { id: 'sleep', label: 'Análisis de Sueño', Icon: Moon },
+  progress: { id: 'progress', label: 'Seguimiento de Progreso', Icon: LineChart },
+};
+
+function inferPulsoModule(msgs: { role: 'user' | 'assistant'; text: string }[]): PulsoModule {
+  for (let i = msgs.length - 1; i >= 0; i--) {
+    const text = (msgs[i].text || '').toLowerCase();
+    if (!text) continue;
+    if (/(sueñ|dormir|descans|recuperaci)/.test(text)) return PULSO_MODULES.sleep;
+    if (/(progres|tonelaje|volumen|grasa|peso corporal)/.test(text)) return PULSO_MODULES.progress;
+    if (/(revis|analiza|evalu|opini).*rutina|rutina.*(revis|analiza)/.test(text)) return PULSO_MODULES.reviewer;
+    if (/(crear|nueva|diseñ|arma|genera).*rutina|rutina.*(crear|nueva)/.test(text)) return PULSO_MODULES.builder;
+  }
+  return PULSO_MODULES.builder;
+}
+
+function ModuleChip({ module }: { module: PulsoModule }) {
+  const { label, Icon } = module;
+  return (
+    <div className="flex items-center justify-center px-4 pb-3">
+      <div
+        key={module.id}
+        className="animate-fade-in inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-3 py-1 text-[11px] font-medium text-foreground/70 ring-1 ring-border"
+      >
+        <span className="bg-ai-gradient inline-flex h-4 w-4 items-center justify-center rounded-full text-white">
+          <Icon className="h-2.5 w-2.5" />
+        </span>
+        <span className="uppercase tracking-wide text-[10px] text-muted-foreground">
+          Pulso · módulo
+        </span>
+        <span className="text-foreground">{label}</span>
+      </div>
+    </div>
+  );
+}
+
+function AssistantBubble({ text }: { text: string }) {
+  const trimmed = text.trim();
+  const [confirmState, setConfirmState] = useState<'pending' | 'confirmed' | 'cancelled'>('pending');
+
+  if (trimmed.startsWith('::action::')) {
+    const body = trimmed.replace(/^::action::\s*/, '');
+    return (
+      <div className="max-w-[88%] rounded-[20px] rounded-bl-md border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 shadow-soft">
+        <div className="flex items-start gap-2">
+          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+              Acción realizada
+            </p>
+            <p className="mt-0.5 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">
+              {body}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (trimmed.startsWith('::confirm::')) {
+    const body = trimmed.replace(/^::confirm::\s*/, '');
+    return (
+      <div className="max-w-[88%] rounded-[20px] rounded-bl-md border border-amber-500/40 bg-warn-soft px-4 py-3 shadow-soft">
+        <div className="flex items-start gap-2">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-amber-800">
+              Confirmación pendiente
+            </p>
+            <p className="mt-0.5 whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">
+              {body}
+            </p>
+            {confirmState === 'pending' ? (
+              <div className="mt-3 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setConfirmState('confirmed')}
+                  className="bg-ai-gradient inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[13px] font-semibold text-white shadow-soft transition-opacity hover:opacity-95"
+                >
+                  <Check className="h-3.5 w-3.5" />
+                  Confirmar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmState('cancelled')}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-4 py-1.5 text-[13px] font-semibold text-foreground/80 ring-1 ring-border transition-colors hover:bg-surface-1"
+                >
+                  <X className="h-3.5 w-3.5" />
+                  Cancelar
+                </button>
+              </div>
+            ) : (
+              <p className="mt-2 text-[12px] font-medium text-muted-foreground">
+                {confirmState === 'confirmed' ? 'Confirmado' : 'Cancelado'}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-[88%] whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">
+      {text}
+    </div>
+  );
+}
 
 export function ChatScreen() {
   const { goBack } = useNav();
@@ -88,7 +207,7 @@ export function ChatScreen() {
                 <Sparkles className="h-4 w-4" />
               </div>
               <div className="min-w-0">
-                <p className="truncate text-[15px] font-semibold leading-tight">AI Coach</p>
+                <p className="truncate text-[15px] font-semibold leading-tight">Pulso</p>
                 <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   En línea · contexto de tus datos
@@ -96,6 +215,7 @@ export function ChatScreen() {
               </div>
             </div>
           </div>
+          <ModuleChip module={inferPulsoModule(messages)} />
         </header>
 
         <main className="flex-1 px-4 pb-40 pt-4">
@@ -124,15 +244,13 @@ export function ChatScreen() {
             <div className="space-y-4">
               {messages.map((m) => (
                 <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div
-                    className={
-                      m.role === 'user'
-                        ? 'rounded-[22px] rounded-br-md bg-primary px-4 py-2.5 text-[15px] leading-relaxed text-primary-foreground shadow-soft max-w-[82%]'
-                        : 'max-w-[88%] whitespace-pre-wrap text-[15px] leading-relaxed text-foreground'
-                    }
-                  >
-                    {m.text}
-                  </div>
+                  {m.role === 'user' ? (
+                    <div className="rounded-[22px] rounded-br-md bg-primary px-4 py-2.5 text-[15px] leading-relaxed text-primary-foreground shadow-soft max-w-[82%]">
+                      {m.text}
+                    </div>
+                  ) : (
+                    <AssistantBubble text={m.text} />
+                  )}
                 </div>
               ))}
               {isTyping && (
